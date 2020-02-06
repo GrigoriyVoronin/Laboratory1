@@ -1,0 +1,11 @@
+C:\Users\molch\Desktop\синх2019\С#\Задачи на семинар\Expr1-9\Expr 68\Expr 68\bin\Debug\netcoreapp2.1\Expr68.deps.json
+C:\Users\molch\Desktop\синх2019\С#\Задачи на семинар\Expr1-9\Expr 68\Expr 68\bin\Debug\netcoreapp2.1\Expr68.runtimeconfig.json
+C:\Users\molch\Desktop\синх2019\С#\Задачи на семинар\Expr1-9\Expr 68\Expr 68\bin\Debug\netcoreapp2.1\Expr68.runtimeconfig.dev.json
+C:\Users\molch\Desktop\синх2019\С#\Задачи на семинар\Expr1-9\Expr 68\Expr 68\bin\Debug\netcoreapp2.1\Expr68.dll
+C:\Users\molch\Desktop\синх2019\С#\Задачи на семинар\Expr1-9\Expr 68\Expr 68\bin\Debug\netcoreapp2.1\Expr68.pdb
+C:\Users\molch\Desktop\синх2019\С#\Задачи на семинар\Expr1-9\Expr 68\Expr 68\obj\Debug\netcoreapp2.1\Expr68.csprojAssemblyReference.cache
+C:\Users\molch\Desktop\синх2019\С#\Задачи на семинар\Expr1-9\Expr 68\Expr 68\obj\Debug\netcoreapp2.1\Expr68.csproj.CoreCompileInputs.cache
+C:\Users\molch\Desktop\синх2019\С#\Задачи на семинар\Expr1-9\Expr 68\Expr 68\obj\Debug\netcoreapp2.1\Expr68.AssemblyInfoInputs.cache
+C:\Users\molch\Desktop\синх2019\С#\Задачи на семинар\Expr1-9\Expr 68\Expr 68\obj\Debug\netcoreapp2.1\Expr68.AssemblyInfo.cs
+C:\Users\molch\Desktop\синх2019\С#\Задачи на семинар\Expr1-9\Expr 68\Expr 68\obj\Debug\netcoreapp2.1\Expr68.dll
+C:\Users\molch\Desktop\синх2019\С#\Задачи на семинар\Expr1-9\Expr 68\Expr 68\obj\Debug\netcoreapp2.1\Expr68.pdb

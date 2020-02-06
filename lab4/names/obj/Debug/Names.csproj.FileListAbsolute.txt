@@ -1,0 +1,11 @@
+C:\Users\molch\Desktop\синх2019\С#\lab4\names\bin\Debug\names.txt
+C:\Users\molch\Desktop\синх2019\С#\lab4\names\bin\Debug\Names.exe.config
+C:\Users\molch\Desktop\синх2019\С#\lab4\names\bin\Debug\Names.exe
+C:\Users\molch\Desktop\синх2019\С#\lab4\names\bin\Debug\Names.pdb
+C:\Users\molch\Desktop\синх2019\С#\lab4\names\bin\Debug\ZedGraph.dll
+C:\Users\molch\Desktop\синх2019\С#\lab4\names\bin\Debug\ZedGraph.xml
+C:\Users\molch\Desktop\синх2019\С#\lab4\names\obj\Debug\Names.csprojAssemblyReference.cache
+C:\Users\molch\Desktop\синх2019\С#\lab4\names\obj\Debug\Names.csproj.CoreCompileInputs.cache
+C:\Users\molch\Desktop\синх2019\С#\lab4\names\obj\Debug\Names.csproj.CopyComplete
+C:\Users\molch\Desktop\синх2019\С#\lab4\names\obj\Debug\Names.exe
+C:\Users\molch\Desktop\синх2019\С#\lab4\names\obj\Debug\Names.pdb

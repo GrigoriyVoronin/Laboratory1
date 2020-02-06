@@ -1,0 +1,11 @@
+C:\Users\molch\Desktop\синх2019\С#\lab9\minilab9\bin\Debug\netcoreapp3.1\minilab9.exe
+C:\Users\molch\Desktop\синх2019\С#\lab9\minilab9\bin\Debug\netcoreapp3.1\minilab9.deps.json
+C:\Users\molch\Desktop\синх2019\С#\lab9\minilab9\bin\Debug\netcoreapp3.1\minilab9.runtimeconfig.json
+C:\Users\molch\Desktop\синх2019\С#\lab9\minilab9\bin\Debug\netcoreapp3.1\minilab9.runtimeconfig.dev.json
+C:\Users\molch\Desktop\синх2019\С#\lab9\minilab9\bin\Debug\netcoreapp3.1\minilab9.dll
+C:\Users\molch\Desktop\синх2019\С#\lab9\minilab9\bin\Debug\netcoreapp3.1\minilab9.pdb
+C:\Users\molch\Desktop\синх2019\С#\lab9\minilab9\obj\Debug\netcoreapp3.1\minilab9.csprojAssemblyReference.cache
+C:\Users\molch\Desktop\синх2019\С#\lab9\minilab9\obj\Debug\netcoreapp3.1\minilab9.AssemblyInfoInputs.cache
+C:\Users\molch\Desktop\синх2019\С#\lab9\minilab9\obj\Debug\netcoreapp3.1\minilab9.AssemblyInfo.cs
+C:\Users\molch\Desktop\синх2019\С#\lab9\minilab9\obj\Debug\netcoreapp3.1\minilab9.dll
+C:\Users\molch\Desktop\синх2019\С#\lab9\minilab9\obj\Debug\netcoreapp3.1\minilab9.pdb

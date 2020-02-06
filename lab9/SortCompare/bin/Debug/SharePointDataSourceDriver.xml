@@ -1,0 +1,3547 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SharePointDataSourceDriver</name>
+    </assembly>
+    <members>
+        <member name="T:net.windward.VersionNumbers">
+            <summary>Version numbers for Windward Reports and AutoTag</summary>
+        </member>
+        <member name="F:net.windward.VersionNumbers.VERSION_STR">
+            <summary>Version as a full string</summary>
+        </member>
+        <member name="F:net.windward.VersionNumbers.ARROW_VERSION_STR">
+            <summary>Arrow version as a full string</summary>
+        </member>
+        <member name="F:net.windward.VersionNumbers.ARROW_MAJOR_VERSION_STR">
+            <summary>Arrow resource version. DO NOT CHANGE; changing this will require an updating user to re-add all web parts</summary>
+        </member>
+        <member name="T:net.windward.utils.ado.SPList.WrSPListCommand">
+            <summary>
+            Wraps a DbCommand object and provides a client independent method of setting parameters. All parameters are
+            set as ? in the sql commands are are set based on their order. This also has an ExecuteInsert that if given
+            a sql command to insert a single row, will return the value of the auto primary key for that row.
+            </summary>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListCommand.#ctor(System.Data.Common.DbProviderFactory,System.String)">
+            <summary>
+            Create a DbCommand wrapper.
+            </summary>
+            <param name="provider">The provider for this command.</param>
+            <param name="odbcProvider">The ODBC provider for the connection this command is for. Can be null.</param>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListCommand.Set(System.Int32,System.Object)">
+            <summary>
+            Set the value of a parameter.
+            </summary>
+            <param name="ind">The index of this paramater in the command.</param>
+            <param name="value">The value of this parameter.</param>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListCommand.ExecuteInsert(System.String)">
+            <summary>
+            Used for inserting a row with an auto primary key. Executes an SQL statement against the Connection object of a .NET Framework 
+             data provider, and returns the value of the primary key.
+            </summary>
+             <param name="pkName">The name of the primary key being automatically set.</param>
+            <returns>
+            The value of the primary key for the inserted row.
+            </returns>
+            <exception cref="T:System.InvalidOperationException">The connection does not exist -or- The connection is not open. </exception><filterpriority>2</filterpriority>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListCommand.CommandText">
+            <summary>
+            Gets or sets the text command to run against the data source.
+            </summary>
+            <returns>
+            The text command to execute. The default value is an empty string ("").
+            </returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListCommand.ExecuteReader">
+            <summary>
+            Executes the <see cref="P:System.Data.IDbCommand.CommandText"></see> against the 
+             <see cref="P:System.Data.IDbCommand.Connection"></see> and builds an <see cref="T:System.Data.IDataReader"></see>.
+            </summary>
+            
+            <returns>
+            An <see cref="T:System.Data.IDataReader"></see> object.
+            </returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListCommand.ExecuteReader(System.Data.CommandBehavior)">
+            <summary>
+            Executes the <see cref="P:System.Data.IDbCommand.CommandText"></see> against the 
+             <see cref="P:System.Data.IDbCommand.Connection"></see>, and builds an <see cref="T:System.Data.IDataReader"></see> 
+             using one of the <see cref="T:System.Data.CommandBehavior"></see> values.
+            </summary>
+            
+            <returns>
+            An <see cref="T:System.Data.IDataReader"></see> object.
+            </returns>
+            
+            <param name="behavior">One of the <see cref="T:System.Data.CommandBehavior"></see> values. </param>
+             <filterpriority>2</filterpriority>
+        </member>
+        <member name="T:net.windward.utils.ado.SPList.WrSPListDatabase">
+            <summary>
+            An SharePoint List database.
+            </summary>
+        </member>
+        <member name="F:net.windward.utils.ado.SPList.WrSPListDatabase.odbcProvider">
+            <summary>
+            Name of the provider used (in this case OleDb; called odbcProvider for consistancy across classes)
+            </summary>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListDatabase.#ctor(System.Data.Common.DbProviderFactory,System.String,System.String,System.String)">
+            <summary>
+            Create an SharePoint List database object.
+            </summary>
+            <param name="provider">The provider for this database.</param>
+            <param name="odbcProvider">The name of the data provider used.</param>
+            <param name="server">The name of the server</param>
+            <param name="database">The name of the database</param>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListDatabase.Name">
+            <summary>
+            The name of the database.
+            </summary>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListDatabase.DefaultSchema">
+            <summary>
+            The default schema for all objects in this database. Returns null if there is no default.
+            </summary>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListDatabase.Tables">
+            <summary>
+            All tables in this database. Must call LoadMetadata first.
+            </summary>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListDatabase.Views">
+            <summary>
+            All views in this database. Must call LoadMetadata first.
+            </summary>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListDatabase.StoredProcedures">
+            <summary>
+            Return all stored procedures in this database. Must call LoadMetadata first.
+            </summary>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListDatabase.LoadMetadata(Kailua.net.windward.utils.WrCredentials,net.windward.utils.ado.WrVendor.ELEM_OWNER,net.windward.utils.ado.WrDatabase.LoadStatus)">
+            <summary>
+            Loads the metadata for this database.
+            </summary>
+            <param name="credentials">The user credentials to access the database.</param>
+            <param name="owner">Determines what metadata objects are read and if full metadata is retrieved.</param>
+            <param name="status">Pass the status of loading the metadata.</param>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListDatabase.LoadMetadata(System.String,net.windward.utils.ado.WrVendor.ELEM_OWNER,net.windward.utils.ado.WrDatabase.LoadStatus)">
+            <summary>
+            Loads the metadata for this database.
+            </summary>
+            <param name="connStr">The connection string to access the database.</param>
+            <param name="owner">Determines what metadata objects are read and if full metadata is retrieved.</param>
+            <param name="status">Pass the status of loading the metadata.</param>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListDatabase.GetTables(System.String,net.windward.utils.ado.WrVendor.ELEM_OWNER)">
+            <summary>
+            Return all tables in this database.
+            </summary>
+            <param name="connStr">The connection string to access the database.</param>
+            <param name="owner">Determines what tables are returned and if metadata is also retrieved.</param>
+            <returns>all tables in this database.</returns>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListDatabase.GetColumns(System.String)">
+            <summary>
+            Return all columns in a table or view.
+            </summary>
+            <param name="connStr">The connection string to access the database.</param>
+            <returns>all columns in a table or view.</returns>
+        </member>
+        <member name="T:net.windward.utils.ado.SPList.WrSPListDataReader">
+            <summary>
+            Wrap an IDataReader returned on a ODBC Execute. All this does is add the GetTimestamp method.
+            </summary>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListDataReader.#ctor(System.Data.IDataReader)">
+            <summary>
+            Create a WrDataReader object wrapping an IDataReader.
+            </summary>
+            <param name="data">The IDataReader we are wrapping.</param>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListDataReader.GetTimestamp(System.Int32)">
+            <summary>
+            Read a timestamp field and return it as an Int64.
+            </summary>
+            <param name="ordinal">The ordinal of the timestamp column.</param>
+            <returns>The timestamp with [0] as msw and [1] as lsw.</returns>
+        </member>
+        <member name="T:net.windward.utils.ado.SPList.WrSPListServer">
+            <summary>
+            Represents an SharePoint List server.
+            </summary>
+        </member>
+        <member name="F:net.windward.utils.ado.SPList.WrSPListServer.odbcProvider">
+            <summary>
+            Name of the provider used (in this case OleDb; called odbcProvider for consistancy across classes)
+            </summary>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListServer.#ctor(System.Data.Common.DbProviderFactory,System.String,System.String)">
+            <summary>
+            Create an SharePoint List server object.
+            </summary>
+            <param name="provider">The provider for this server.</param>
+            <param name="odbcProvider">The provider for this connection.</param>
+            <param name="name">The name of the server.</param>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListServer.Name">
+            <summary>
+            The name of the server.
+            </summary>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListServer.GetDatabases(Kailua.net.windward.utils.WrCredentials)">
+            <summary>
+            All databases on this server. If a provider does not have the concept of databases (Oracle)
+            it will always return 1 database.
+            </summary>
+            <param name="credentials">The user credentials to access the database.</param>
+            <returns>All databases on this server.</returns>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListServer.GetDatabases(System.String)">
+            <summary>
+            All databases on this server. If a provider does not have the concept of databases (Oracle)
+            it will always return 1 database.
+            </summary>
+            <param name="connStr">The connection string to access the database.</param>
+            <returns>All databases on this server.</returns>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListServer.CreateDatabase(System.String,Kailua.net.windward.utils.WrCredentials)">
+            <summary>
+            Create a database object.
+            </summary>
+            <param name="database">The name of the database.</param>
+            <param name="credentials">The user credentials to access the database.</param>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListServer.CompareTo(System.Object)">
+            <summary>
+            Compares the current instance with another object of the same type.
+            </summary>
+            <param name="obj">An object to compare with this instance. </param>
+            <returns>a 32-bit signed integer that indicates the relative order of the objects being compared.</returns>
+        </member>
+        <member name="T:net.windward.utils.ado.SPList.WrSPListSyntax">
+            <summary>
+             A lightweight handler of functionality that the ODBC and OleDb drivers can use as well as the main implementations.
+            </summary>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListSyntax.#ctor(System.Data.Common.DbProviderFactory,System.String)">
+            <summary>
+            Create the object.
+            </summary>
+            <param name="provider">The provider for this connector.</param>
+            <param name="odbcProvider">Name of the OleDb or ODBC provider.</param>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListSyntax.EncodeSelect(System.String)">
+            <summary>
+            Escapes any special characters in the passed in select.
+            </summary>
+            <param name="select">The unescaped select.</param>
+            <returns>The escaped select.</returns>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListSyntax.ConvertSelect(System.String)">
+            <summary>
+            Convert a select to normalize the "top 10" syntax
+            </summary>
+            <param name="select">The select with our standard usage</param>
+            <returns>The select for this database.</returns>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListSyntax.SafeTableName(System.String)">
+            <summary>
+            Create a safe table name. Generally needed only if the name has a space in it or is a reserved name.
+            </summary>
+            <param name="tableName">The true table name.</param>
+            <returns>The table name as it should be used in a select.</returns>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListSyntax.SafeColumnName(System.String)">
+            <summary>
+            Create a safe column name. Generally needed only if the name has a space in it or is a reserved name.
+            </summary>
+            <param name="columnName">The true column name.</param>
+            <returns>The table name as it should be used in a select.</returns>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListSyntax.SafeTableColumnName(System.String,System.String)">
+            <summary>
+            Create a safe table name. Generally needed only if the name has a space in it or is a reserved name.
+            </summary>
+            <param name="tableName">The true table name.</param>
+            <param name="columnName">The true column name.</param>
+            <returns>The table.column name as it should be used in a select.</returns>
+        </member>
+        <member name="T:net.windward.utils.ado.SPList.WrSPListVendor">
+            <summary>
+            This is similiar to DbProviderFactory and provides additional functionality for each provider. All properties to list
+            if a provider can perform any task in it's child classes is provider here, not in the child classes. This
+            class can return IWrServer objects for a given server/instance that exists on a computer. The ODBC/OleDb
+            concept of a Provider (which is different from a DbProviderFactory) is handled as a property set in the
+            WrProviderFactory class so all other cases do not need to implement a class for that layer.
+            This is called WrVendor instead of WrProvider because it is different from DbProviderFactory and because
+            we use the term Provider for the ODBC/OleDb providers.
+            This is the class for the SharePoint List using it's OleDb driver.
+            </summary>
+        </member>
+        <member name="F:net.windward.utils.ado.SPList.WrSPListVendor.FactoryClass">
+            <summary>
+            The DbProviderFactory class for this vendor
+            </summary>
+        </member>
+        <member name="F:net.windward.utils.ado.SPList.WrSPListVendor.FactoryName">
+            <summary>
+            The suggested name for this vendor.
+            </summary>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListVendor.#ctor">
+            <summary>
+            Creates an SharePoint List vendor object.
+            </summary>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListVendor.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Creates an SharePoint List vendor object.
+            </summary>
+            <param name="name">The friendly name of the provider.</param>
+            <param name="description">The description of this provider (optional).</param>
+            <param name="providerClass">The class of the provider.</param>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListVendor.CanEnumerateServers">
+            <summary>
+            True if can enumerate running servers from this vendor. This is implemented seperately from
+            CanCreateDataSourceEnumerator because DB2 and SqlServer implement CreateDataSourceEnumerator differently.
+            </summary>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListVendor.CanEnumerateDatabases">
+            <summary>
+            True if can enumerate databases on a server. This is implemented seperately from
+            CanCreateDataSourceEnumerator because DB2 and SqlServer implement CreateDataSourceEnumerator differently.
+            </summary>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListVendor.HasStoredProcedures">
+            <summary>
+            True if a database supports stored procedures.
+            </summary>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListVendor.CanLaunchAdministrator">
+            <summary>
+            True if can launch the administrator for this vendor. This will return true if it can find the admin
+            program file. In that case the launch could still fail.
+            </summary>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListVendor.CanRunScripts">
+            <summary>
+            True if can run DDL scripts.
+            </summary>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListVendor.CanUseTrustedConnection">
+            <summary>
+            True if can use the WindowsIdentity of the caller eliminating the need to pass a username and password.
+            </summary>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListVendor.HasProviders">
+            <summary>
+            True if you need to select a provider for this vendor.
+            </summary>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListVendor.IsInstalled">
+            <summary>
+            Returns true if this connector is installed on the system. To be true the connector must be in the GAC and must
+            be listed in machine.config.
+            </summary>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListVendor.ParameterFormat">
+            <summary>
+            The parameter format in the form "@p{0}" or similiar where {0} adds a unique name. null if parameter naming is not used.
+            </summary>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListVendor.GUID">
+            <summary>
+            Uniquely defines a WrVendor. So Excel is distinct from Ole-DB.
+            </summary>
+        </member>
+        <member name="P:net.windward.utils.ado.SPList.WrSPListVendor.OdbcProvider">
+            <summary>
+            The name of the (ODBC) providers for this (vendor) provider.
+            </summary>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListVendor.ConnectionString(System.String,System.String,Kailua.net.windward.utils.WrCredentials,System.Boolean)">
+            <summary>
+            A connection string for a database on a server.
+            </summary>
+            <param name="server">The server to access (ex: localhost).</param>
+            <param name="database">The database to connect to.</param>
+            <param name="credentials">The user credentials to access the database.</param>
+            <param name="showPassword">True to include the password, false to add the password as *****.</param>
+            <returns>The connection string for this database on this server.</returns>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListVendor.ConnectionParams(System.String)">
+            <summary>
+            Returns the parameters from a connection string making the best guess. Will return null for items it could not determine.
+            </summary>
+            <param name="connectionString">The connection string to parse.</param>
+            <returns>The parameters.</returns>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListVendor.GetOdbcProviders">
+            <summary>
+            Return all (ODBC/OleDb) providers for this (vendor) provider.
+            </summary>
+            <exception cref="T:net.windward.utils.ado.WrDbException">Thrown if this (vendor) providers does not support (ODBC/OleDb) providers.</exception>
+            <returns>The name of each provider.</returns>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListVendor.CreateCommand">
+            <summary>
+            Returns a new instance of the provider's class that implements the WrCommand class.
+            </summary>
+            <returns>A new instance of WrCommand.</returns>
+        </member>
+        <member name="M:net.windward.utils.ado.SPList.WrSPListVendor.CreateServer(System.String)">
+            <summary>
+            Create a server object.
+            </summary>
+            <param name="server">The name of the server the database is on.</param>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.Lists">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetWebRequest(System.Uri)">
+            <summary>
+            Creates a System.Net.WebRequest for the specified uri.
+            </summary>
+            <param name="uri">The System.Uri to use when creating the System.Net.WebRequest.</param>
+            <returns>The System.Net.WebRequest.</returns>
+            <exception cref="T:System.InvalidOperationException">The uri parameter is null.</exception>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.#ctor">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.GetListCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.GetListAndViewCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.DeleteListCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.AddListCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.AddListFromFeatureCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.UpdateListCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.GetListCollectionCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.GetListItemsCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.GetListItemChangesCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.GetListItemChangesWithKnowledgeCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.GetListItemChangesSinceTokenCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.UpdateListItemsCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.UpdateListItemsWithKnowledgeCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.AddDiscussionBoardItemCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.AddWikiPageCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.GetVersionCollectionCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.AddAttachmentCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.GetAttachmentCollectionCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.DeleteAttachmentCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.CheckOutFileCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.UndoCheckOutCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.CheckInFileCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.GetListContentTypesCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.GetListContentTypesAndPropertiesCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.GetListContentTypeCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.CreateContentTypeCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.UpdateContentTypeCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.DeleteContentTypeCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.UpdateContentTypeXmlDocumentCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.UpdateContentTypesXmlDocumentCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.DeleteContentTypeXmlDocumentCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSLists.Lists.ApplyContentTypeToListCompleted">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetList(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListAndView(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListAndViewAsync(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListAndViewAsync(System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.DeleteList(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.DeleteListAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.DeleteListAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.AddList(System.String,System.String,System.Int32)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.AddListAsync(System.String,System.String,System.Int32)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.AddListAsync(System.String,System.String,System.Int32,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.AddListFromFeature(System.String,System.String,System.Guid,System.Int32)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.AddListFromFeatureAsync(System.String,System.String,System.Guid,System.Int32)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.AddListFromFeatureAsync(System.String,System.String,System.Guid,System.Int32,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateList(System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.Xml.XmlNode,System.Xml.XmlNode,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateListAsync(System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.Xml.XmlNode,System.Xml.XmlNode,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateListAsync(System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.Xml.XmlNode,System.Xml.XmlNode,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListCollection">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListCollectionAsync">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListCollectionAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListItems(System.String,System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.String,System.Xml.XmlNode,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListItemsAsync(System.String,System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.String,System.Xml.XmlNode,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListItemsAsync(System.String,System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.String,System.Xml.XmlNode,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListItemChanges(System.String,System.Xml.XmlNode,System.String,System.Xml.XmlNode)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListItemChangesAsync(System.String,System.Xml.XmlNode,System.String,System.Xml.XmlNode)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListItemChangesAsync(System.String,System.Xml.XmlNode,System.String,System.Xml.XmlNode,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListItemChangesWithKnowledge(System.String,System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.String,System.Xml.XmlNode,System.String,System.Xml.XmlNode,System.Xml.XmlNode)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListItemChangesWithKnowledgeAsync(System.String,System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.String,System.Xml.XmlNode,System.String,System.Xml.XmlNode,System.Xml.XmlNode)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListItemChangesWithKnowledgeAsync(System.String,System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.String,System.Xml.XmlNode,System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListItemChangesSinceToken(System.String,System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.String,System.Xml.XmlNode,System.String,System.Xml.XmlNode)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListItemChangesSinceTokenAsync(System.String,System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.String,System.Xml.XmlNode,System.String,System.Xml.XmlNode)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListItemChangesSinceTokenAsync(System.String,System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.String,System.Xml.XmlNode,System.String,System.Xml.XmlNode,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateListItems(System.String,System.Xml.XmlNode)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateListItemsAsync(System.String,System.Xml.XmlNode)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateListItemsAsync(System.String,System.Xml.XmlNode,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateListItemsWithKnowledge(System.String,System.Xml.XmlNode,System.String,System.Xml.XmlNode)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateListItemsWithKnowledgeAsync(System.String,System.Xml.XmlNode,System.String,System.Xml.XmlNode)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateListItemsWithKnowledgeAsync(System.String,System.Xml.XmlNode,System.String,System.Xml.XmlNode,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.AddDiscussionBoardItem(System.String,System.Byte[])">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.AddDiscussionBoardItemAsync(System.String,System.Byte[])">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.AddDiscussionBoardItemAsync(System.String,System.Byte[],System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.AddWikiPage(System.String,System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.AddWikiPageAsync(System.String,System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.AddWikiPageAsync(System.String,System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetVersionCollection(System.String,System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetVersionCollectionAsync(System.String,System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetVersionCollectionAsync(System.String,System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.AddAttachment(System.String,System.String,System.String,System.Byte[])">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.AddAttachmentAsync(System.String,System.String,System.String,System.Byte[])">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.AddAttachmentAsync(System.String,System.String,System.String,System.Byte[],System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetAttachmentCollection(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetAttachmentCollectionAsync(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetAttachmentCollectionAsync(System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.DeleteAttachment(System.String,System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.DeleteAttachmentAsync(System.String,System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.DeleteAttachmentAsync(System.String,System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.CheckOutFile(System.String,System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.CheckOutFileAsync(System.String,System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.CheckOutFileAsync(System.String,System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UndoCheckOut(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UndoCheckOutAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UndoCheckOutAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.CheckInFile(System.String,System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.CheckInFileAsync(System.String,System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.CheckInFileAsync(System.String,System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListContentTypes(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListContentTypesAsync(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListContentTypesAsync(System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListContentTypesAndProperties(System.String,System.String,System.String,System.Boolean,System.Boolean)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListContentTypesAndPropertiesAsync(System.String,System.String,System.String,System.Boolean,System.Boolean)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListContentTypesAndPropertiesAsync(System.String,System.String,System.String,System.Boolean,System.Boolean,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListContentType(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListContentTypeAsync(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.GetListContentTypeAsync(System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.CreateContentType(System.String,System.String,System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.CreateContentTypeAsync(System.String,System.String,System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.CreateContentTypeAsync(System.String,System.String,System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateContentType(System.String,System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.Xml.XmlNode,System.Xml.XmlNode,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateContentTypeAsync(System.String,System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.Xml.XmlNode,System.Xml.XmlNode,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateContentTypeAsync(System.String,System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.Xml.XmlNode,System.Xml.XmlNode,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.DeleteContentType(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.DeleteContentTypeAsync(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.DeleteContentTypeAsync(System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateContentTypeXmlDocument(System.String,System.String,System.Xml.XmlNode)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateContentTypeXmlDocumentAsync(System.String,System.String,System.Xml.XmlNode)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateContentTypeXmlDocumentAsync(System.String,System.String,System.Xml.XmlNode,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateContentTypesXmlDocument(System.String,System.Xml.XmlNode)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateContentTypesXmlDocumentAsync(System.String,System.Xml.XmlNode)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.UpdateContentTypesXmlDocumentAsync(System.String,System.Xml.XmlNode,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.DeleteContentTypeXmlDocument(System.String,System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.DeleteContentTypeXmlDocumentAsync(System.String,System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.DeleteContentTypeXmlDocumentAsync(System.String,System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.ApplyContentTypeToList(System.String,System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.ApplyContentTypeToListAsync(System.String,System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.ApplyContentTypeToListAsync(System.String,System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSLists.Lists.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.GetListCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListAndViewCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListAndViewCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.GetListAndViewCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.DeleteListCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.AddListCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.AddListCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.AddListCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.AddListFromFeatureCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.AddListFromFeatureCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.AddListFromFeatureCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.UpdateListCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.UpdateListCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.UpdateListCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListCollectionCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListCollectionCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.GetListCollectionCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListItemsCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListItemsCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.GetListItemsCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListItemChangesCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListItemChangesCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.GetListItemChangesCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListItemChangesWithKnowledgeCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListItemChangesWithKnowledgeCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.GetListItemChangesWithKnowledgeCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListItemChangesSinceTokenCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListItemChangesSinceTokenCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.GetListItemChangesSinceTokenCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.UpdateListItemsCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.UpdateListItemsCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.UpdateListItemsCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.UpdateListItemsWithKnowledgeCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.UpdateListItemsWithKnowledgeCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.UpdateListItemsWithKnowledgeCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.AddDiscussionBoardItemCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.AddDiscussionBoardItemCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.AddDiscussionBoardItemCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.AddWikiPageCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.AddWikiPageCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.AddWikiPageCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetVersionCollectionCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetVersionCollectionCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.GetVersionCollectionCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.AddAttachmentCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.AddAttachmentCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.AddAttachmentCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetAttachmentCollectionCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetAttachmentCollectionCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.GetAttachmentCollectionCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.DeleteAttachmentCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.CheckOutFileCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.CheckOutFileCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.CheckOutFileCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.UndoCheckOutCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.UndoCheckOutCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.UndoCheckOutCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.CheckInFileCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.CheckInFileCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.CheckInFileCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListContentTypesCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListContentTypesCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.GetListContentTypesCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListContentTypesAndPropertiesCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListContentTypesAndPropertiesCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.GetListContentTypesAndPropertiesCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListContentTypeCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.GetListContentTypeCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.GetListContentTypeCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.CreateContentTypeCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.CreateContentTypeCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.CreateContentTypeCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.UpdateContentTypeCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.UpdateContentTypeCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.UpdateContentTypeCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.DeleteContentTypeCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.DeleteContentTypeCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.DeleteContentTypeCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.UpdateContentTypeXmlDocumentCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.UpdateContentTypeXmlDocumentCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.UpdateContentTypeXmlDocumentCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.UpdateContentTypesXmlDocumentCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.UpdateContentTypesXmlDocumentCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.UpdateContentTypesXmlDocumentCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.DeleteContentTypeXmlDocumentCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.DeleteContentTypeXmlDocumentCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.DeleteContentTypeXmlDocumentCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.ApplyContentTypeToListCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSLists.ApplyContentTypeToListCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSLists.ApplyContentTypeToListCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.SharePointDataset">
+            <summary>
+            A dataset, that is part of a datasource, to be passed to SharePointDataSource.
+            </summary>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataset.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.Collections.Generic.IEnumerable{WindwardInterfaces.net.windward.datasource.DatasetField},System.Collections.Generic.List{WindwardInterfaces.net.windward.datasource.DatasetParameter})">
+            <summary>
+            Create the object.
+            </summary>
+            <param name="name">The name of this dataset.</param>
+            <param name="description">The description for this dataset.</param>
+            <param name="selectAll">The select to get this dataset.</param>
+            <param name="selectAllFormat">The format for displaying the returned vars.</param>
+            <param name="selectCount">A select that will return a count of the number of possible values.</param>
+            <param name="selectCheck">A select that will return if a given value is one of the list of possibles.</param>
+            <param name="timeout">The timeout for this dataset. 0 is infinite.</param>
+            <param name="fields">The field mapping for this dataset.</param>
+            <param name="parameters">The parameters for this dataset.</param>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataset.#ctor(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Create the object.
+            </summary>
+            <param name="name">The name of this dataset.</param>
+            <param name="description">The description for this dataset.</param>
+            <param name="select">The select to get this dataset.</param>
+            <param name="timeout">The timeout for this dataset. 0 is infinite.</param>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataset.#ctor(SharePointDataSourceDriver.SharePointDataset)">
+            <summary>
+            Copy constructor.
+            </summary>
+            <param name="src">The object to copy.</param>
+        </member>
+        <member name="P:SharePointDataSourceDriver.SharePointDataset.Timeout">
+            <summary>
+            The timeout for this dataset. 0 is infinite.
+            </summary>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataset.ReadRdl(System.String,System.IO.Stream)">
+            <summary>
+            Get the datasets in a SSRS RDL file.
+            </summary>
+            <param name="dataSourceName">The name of the datasource to read.</param>
+            <param name="rdlFile">The stream containing the RDL file.</param>
+            <returns>The dataset(s) for the requested datasource.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataset.GetDbType(System.String)">
+            <summary>
+             Convert a RDL parameter type to a DbType.
+            </summary>
+            <param name="typeName">The name of the type.</param>
+            <returns>The equivilent DbType.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataset.GetDbType(System.Type)">
+            <summary>
+             Convert a variable type to a DbType.
+            </summary>
+            <param name="type">The variable type.</param>
+            <returns>The equivilent DbType.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataset.#ctor(System.Xml.XmlElement)">
+            <summary>
+            Create the object from the passed in xml.
+            </summary>
+            <param name="element">The info stored in xml.</param>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataset.ToXml(System.Xml.XmlWriter)">
+            <summary>
+            Serialize this object.
+            </summary>
+            <param name="xmlWriter">The xml document serializing to.</param>
+            <returns>The set of elements representing this object.</returns>
+        </member>
+        <member name="T:SharePointDataSourceDriver.SharePointDatasetField">
+            <summary>
+            A field in an ADO dataset.
+            </summary>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDatasetField.#ctor(System.String,WindwardInterfaces.net.windward.datasource.MetaDataElement,System.String,WindwardInterfaces.net.windward.datasource.DatasetField.FIELD_TYPE,System.Boolean)">
+            <summary>
+            Create a field object for a column in the containing dataset.
+            </summary>
+            <param name="fieldName">The name used to access this field.</param>
+            <param name="metadata">The metadata for this field.</param>
+            <param name="description">The description of this field. Can be null.</param>
+            <param name="type">The type of this field.</param>
+            <param name="primaryKey">true if this field is the dataset primary key.</param>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDatasetField.#ctor(System.Xml.XmlElement)">
+            <summary>
+            Create the object from the passed in xml.
+            </summary>
+            <param name="element">The info stored in xml.</param>
+        </member>
+        <member name="T:SharePointDataSourceDriver.SharePointDataSource">
+            <summary> This supplies a data source to Windward Reports using ADO.NET. The DataSourceProvider class is built on the concept of
+            xml nodes. For this class, a node is a DbDataReader returned by a ADO call to DbCommand.ExecuteReader().<br/>
+            
+            An xml file always has the concept of the current node. This is not the case with a sql database - there is no current
+            DbDataReader. A DbDataReader is only generated by the wr:query and the wr:foreach tags. Therefore, all other tags only
+            make sense if they use the var attribute from a query or foreach to identify the DbDataReader they are to be applied
+            to. A tag not identifying a DbDataReader will throw an exception.<br/>
+            
+            A query or foreach tag can reference a var from another query or foreach tag using ${var.item}.. An XPath query can
+            describe a node as well as an element. In this class a query defines a DbDataReader and is only an element.<br/>
+            
+            Also, with xml you can use xpath in each tag performing complex logic in determining what text to return. It
+            is very different for sql. The foreach or query can have complex logic. But the other tags can only return
+            an element from a result set that the foreach/query earlier returned or do a single select.<br/>
+            
+            When using a var (&lt;wr:forEach var="result"/&gt;) that identifies a result set, you can use the following in a tag:<ul>
+            <li>${result[1]} - is column element [1] in the row presently on (1-based)</li>
+            <li>${result[2][1]} - is column element [1] in the row + 2 presently on (0-based)</li>
+            <li>${result.NAME} - is the column element named NAME in the row presently on</li>
+            <li>${result[2].NAME} - is the column element named NAME in the row + 2 presently on</li>
+            <li>${result.columnNames[1]} - is the name of column 1 (1-based)</li>
+            </ul>
+            
+            The use of result[N] where N is a row number is limited to values of 0...N where N is step-1. result[1] is treated
+            as column 1 of the row presently on, it is only result[0][1] and result[0].NAME that can hit rows other than the
+            row presently on. This functionality requires a result set that can move to previous as well as next. If the ADO
+            driver you use cannot handle a call to previous, you cannot use this functionality.
+            
+            An &lt;if select= ... &gt; will return true if the passed in select returns a DbDataReader with one or more rows. An
+            &lt;if select="select count (*) from customers" <b>notEmpty="true"</b>&gt; will perform two steps. The first step is it will
+            return false if there are no results returned. If results are returned it assumes the select is a count and will do a
+            <code>return DbDataReader.getInt(1) > 0;</code>. This does not look at the select statement, it is the notEmpty="true" that
+            puts it in this mode.
+            
+            </summary>
+            <author>  David Thielen
+            </author>
+            <version>  4.0 3 November 2005
+            </version>
+        </member>
+        <member name="P:SharePointDataSourceDriver.SharePointDataSource.Datasets">
+            <summary>
+            Set the datasets for this datasource. When called all previous datasets will be removed. You can call AdoDataset.ReadPod()
+            on a POD file to create the array to set here.
+            </summary>
+        </member>
+        <member name="P:SharePointDataSourceDriver.SharePointDataSource.ParamMode">
+            <summary>
+            The parameter substitution mode.
+            </summary>
+        </member>
+        <member name="P:SharePointDataSourceDriver.SharePointDataSource.Map">
+            <summary>
+            Adds a map that is used for ${variable} substitution. The map should be string pairs and the key values cannot
+            have any of the characters ${} in them. When ${key} is found in any tag, it is replaced with the matching value.
+            The key and value strings are not evaluated in any way, it is just a text substitution. This replace occurs before
+            any other evaluation of a tag so the value string can have ${variable} values that will then be evaluated.
+            This call sets the map so calling it a second time replaces the map passed in the first time. The map is copied
+            so on return changes to the passed in map will not affect the data source.
+            </summary>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.Close">
+            <summary>
+            Called when processing is complete. Used to close any resources opened by this object.
+            </summary>
+        </member>
+        <member name="P:SharePointDataSourceDriver.SharePointDataSource.Datasource">
+            <summary>
+            Return the underlying datasource provider.
+            </summary>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.getDatasourceName">
+            <summary>
+            Returns the name of this type in the form "sql", "xml", etc.
+            </summary>
+            <returns>"sharepoint"</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.#ctor(System.Type,System.String)">
+            <summary> 
+            Create a DataSourceProvider that uses Ado to access a SQL database. This constructor calls
+            new IDbConnection(connectionString) to create a connection. Each forEach and query tag will also cause
+            a connection to be created.
+            
+            Example:
+            Access: typeof(System.Data.Odbc), "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=Northwind.mdb"
+            DB2: typeof(IBM.Data.DB2), "server=db2.windwardreports.com;database=SAMPLE;Uid=demo;Pwd=demo;"
+            Excel: typeof(System.Data.OleDb), "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=Northwind Mini - Data.xlsx;Extended Properties=\"Excel 12.0 Xml;HDR=YES\""
+            MySql: typeof(MySql.Data.MySqlClient), "server=mysql.windwardreports.com;database=sakila;user id=demo;password=demo;"
+            ODBC: typeof(System.Data.Odbc), "Driver={Sql Server};Server=localhost;Database=Northwind;User ID=test;Password=pass;"
+            OleDB: typeof(System.Data.OleDb), "Provider=sqloledb;Data Source=localhost;Initial Catalog=Northwind;User ID=test;Password=pass;"
+            Oracle: typeof(Oracle.DataAccess.Client), "Data Source=oracle.windwardreports.com:1521/HR;Persist Security Info=True;Password=HR;User ID=HR"
+            Do not use System.Data.OracleClient - even Microsoft discourages its use.
+            SqlServer: typeof(System.Data.SqlClient), "Data Source=mssql.windwardreports.com;Initial Catalog=Northwind;user=demo;password=demo;"
+            </summary>
+            <param name="type">The type of the IDbConnection driver. For example, for SqlServer this would be typeof(SqlConnection).</param>
+            <param name="connectionString">The connection string used in the IDbConnection constructor.</param>
+            <throws>  DataSourceException thrown if anything goes wrong. </throws>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.#ctor(System.String,System.String)">
+            <summary>
+            Create a DataSourceProvider that uses Ado to access a SQL database. This constructor calls
+            DbProviderFactories.GetFactory(providerName) to get a provider and uses that provider and the connection
+            string to create a connection. Each forEach and query tag will also cause
+            a connection to be created.
+            
+            Example:
+            Access: "System.Data.Odbc", "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=Northwind.mdb"
+            DB2: "IBM.Data.DB2", "server=db2.windwardreports.com;database=SAMPLE;Uid=demo;Pwd=demo;"
+            Excel: "System.Data.OleDb", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=Northwind Mini - Data.xlsx;Extended Properties=\"Excel 12.0 Xml;HDR=YES\""
+            MySql: "MySql.Data.MySqlClient", "server=mysql.windwardreports.com;database=sakila;user id=demo;password=demo;"
+            ODBC: "System.Data.Odbc", "Driver={Sql Server};Server=localhost;Database=Northwind;User ID=test;Password=pass;"
+            OleDB: "System.Data.OleDb", "Provider=sqloledb;Data Source=localhost;Initial Catalog=Northwind;User ID=test;Password=pass;"
+            Oracle: "Oracle.DataAccess.Client", "Data Source=oracle.windwardreports.com:1521/HR;Persist Security Info=True;Password=HR;User ID=HR"
+            Do not use System.Data.OracleClient - even Microsoft discourages its use.
+            SqlServer: "System.Data.SqlClient", "Data Source=mssql.windwardreports.com;Initial Catalog=Northwind;user=demo;password=demo;"
+            </summary>
+            <param name="providerName">The name of the provider. For example, for SqlServer this would be "System.Data.SqlClient".</param>
+            <param name="connectionString">The connection string used in the IDbConnection constructor.</param>
+            <throws>  DataSourceException thrown if anything goes wrong. </throws>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.validateTag(net.windward.tags.BaseTag)">
+            <summary> Verifys that a tag has all required attributes and no unknown attributes.
+            
+            </summary>
+            <param name="xmlTag">The tag to check
+            </param>
+            <throws>  net.windward.tags.TagException thrown if illegal parameters passed in. </throws>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.approveDenyModifySelect(net.windward.tags.BaseTag)">
+                    * Verifys that a tag select is approved by a user defined callback
+                    * Or denies by throwing a DatasourceException or modifies the select
+                     *
+                     * @param xmlTag The tag to check
+                    * @throws net.windward.env.DataSourceException
+                    *          thrown if illegal parameters passed in.
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.close">
+            <summary> Called when processing is complete. Used to close any resources opened by this object. Will close the Ado
+            connection if this object created the connection.
+            </summary>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.getQueryMode(System.String,net.windward.tags.BaseTag)">
+            <summary>
+            Determine the query mode of a given string
+            </summary>
+            <param name="query">Query string to determine the mode of.</param>
+            <param name="tag">The tag this select is for. This may be null.</param>
+            <returns>BaseTag.MODE_NONE, BaseTag.MODE_VALUE, BaseTag.MODE_EVALUATE, or BaseTag.MODE_SELECT</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.setDatasets(System.Object[])">
+            <summary>
+            Set the datasets to use with this datasource. This will overwrite datasets from previous calls to this method.
+            </summary>
+            <param name="datasets">The datasets to use. Can be null to turn off datasets. This is a SharePointDataset[] but because of
+            how the .NET engine is structured, we need to declare it as an object.</param>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.getTagAttributes">
+            <summary> Returns the allowed attributes for all tags.</summary>
+            <returns> The tag attributes.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.getParamMode">
+            <summary>
+            Get the parameter substitution mode.
+            </summary>
+            <returns>
+            the parameter substitution mode.
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.setParamMode(System.Int32)">
+            <summary>
+            Set the parameter substitution mode.
+            </summary>
+            <param name="mode">the parameter substitution mode.</param>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.setMap(java.util.Map)">
+            <summary>
+            Sets the map that is used for ${variable} substitution. The map key values cannot
+            have any of the characters ${} in them. When ${key} is found in any tag, it is replaced with the matching value.
+            The value can be a string, number (int, float, etc), or datetime. The map is copied
+            so on return changes to the passed in map will not affect the data source.
+            </summary>
+            <param name="map">The map of string/value pairs. </param>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.getMap">
+            <summary>
+            Returns the map of variables for this datasource.
+            </summary>
+            <returns>
+            the map of variables for this datasource.
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.getRootNode">
+            <summary> Returns the root node for this data set. Outside of forEach loops this is the node all tag requests will be
+            evaluated against.
+            
+            </summary>
+            <returns> The root node.
+            </returns>
+        </member>
+        <member name="P:SharePointDataSourceDriver.SharePointDataSource.RootNode">
+            <summary>
+            Returns the root node for this data set. Outside of forEach loops this is the node all tag requests will be
+            evaluated against.
+            </summary>
+        </member>
+        <member name="P:SharePointDataSourceDriver.SharePointDataSource.Properties">
+            <summary>
+            All of the properties for this datasource connection. May Include the password unencrypted.
+            </summary>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.addView(System.String,System.String)">
+            <summary> This creates a view using the passed in select statement. It will then substitute in this view by it's name
+            where ${key} is used in the template. This is the equivilent of creating the view yourself and then calling
+            setMap passing it this key and the view name.<br/>
+            If you put an identical key in for both addView and setMap then there is no gaurantee as to which will be used.
+            The view will automatically be deleted when close() is called.
+            
+            </summary>
+            <param name="key">The ${name} used to reference this view.
+            </param>
+            <param name="select">The select part of the sql statement to create the view. Example: "select * from INVENTORY where
+            PRICE > 10"
+            </param>
+            <returns> The view name. You must not delete the view but you can use it until close() is called.
+            </returns>
+        </member>
+        <member name="T:SharePointDataSourceDriver.SharePointDataSource.AdoNode">
+            <summary>
+            Implementation of DataSourceNode for this datasource.
+            </summary>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.#ctor(SharePointDataSourceDriver.SharePointDataSource,System.Data.IDataRecord)">
+            <summary>
+            Create the object.
+            </summary>
+            <param name="parent">Parent datasource.</param>
+            <param name="ddr">DataRecord for this node.</param>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.GetMetaData(net.windward.tags.BaseTag,System.Int32,System.Collections.Generic.IList{net.windward.datasource.DataSourceNode})">
+            <summary>
+            Return metadata info for this node. This is only called by AutoTag.
+            </summary>
+            <param name="tag">The tag for this node.</param>
+            <param name="index">The chart index if it is a chart tag.</param>
+            <param name="stack">The node stack at this point.</param>
+            <returns>Metadata info for this node.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.AdjustSelect(System.String,System.Collections.Generic.IList{net.windward.datasource.DataSourceNode})">
+            <summary>
+            This method is only called by AutoTag. It is never called by the engine and can just throw an exception for
+            a datasource written for the engine only. This will adjust a select statement to use the "column as alias"
+            construct if there are multiple identical columns in the select.
+            </summary>
+            <param name="select">The select to adjust</param>
+            <param name="stack">The stack of forEach loops in at this point. Node [0] is the root document node so this will always
+                have length of at least 1.</param>
+            <returns>The adjusted select.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.GetForEach(net.windward.tags.ForEachTag,System.Collections.Generic.IList{net.windward.datasource.DataSourceNode})">
+            <summary>
+            This method is only called by AutoTag. It returns a DataTable of the rows a forEach tag will return.
+            </summary>
+            <param name="tag">The ForEach tag.</param>
+            <param name="stack">The node stack at the forEach tag location.</param>
+            <returns>The DataTable of the rows returned.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.GetQuery(net.windward.tags.BaseTag,System.Collections.Generic.IList{net.windward.datasource.DataSourceNode})">
+            <summary>
+            This method is only called by AutoTag. It returns a DataTable of the row a query tag will return. Even if the select in a
+            query could return multiple rows, this returns just the first row.
+            </summary>
+            <param name="tag">The query tag.</param>
+            <param name="stack">The node stack at the query tag location.</param>
+            <returns>The DataTable with the row returned.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.GetSet(net.windward.tags.SetTag,System.Collections.Generic.IList{net.windward.datasource.DataSourceNode})">
+            <summary>
+            This method is only called by AutoTag. It returns the text a set tag will return.
+            </summary>
+            <param name="tag">The set tag.</param>
+            <param name="stack">The node stack at the forEach tag location.</param>
+            <returns>The result of a set tag.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.isSelect(System.String,System.Boolean)">
+            <summary>
+            Returns true if the passed in string is a select, false if it's a value= or evaluate= string.
+            </summary>
+            <param name="select">The select.</param>
+            <param name="textIsNode">not used.</param>
+            <returns>true if a select, false if an evalute.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.getQueryMode(System.String,net.windward.tags.BaseTag)">
+            <summary>
+            Determine the query mode of a given string
+            </summary>
+            <param name="query">Query string to determine the mode of.</param>
+            <param name="tag">The tag this select is for. This may be null.</param>
+            <returns>BaseTag.MODE_NONE, BaseTag.MODE_VALUE, BaseTag.MODE_EVALUATE, or BaseTag.MODE_SELECT</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.getBitmap(net.windward.tags.OutTag,net.windward.datasource.DataSourceNode[],net.windward.util.macro.IMacroState)">
+            <summary> Called when tag is of type BITMAP. Returns the fileimage of the bitmap from the datasource. Return a 0 length
+            array for an empty bitmap. Return null if the requested node does not exist.
+            
+            </summary>
+            <param name="tag">The values that identify the datasource node to read.
+            </param>
+            <param name="stack">The stack of forEach loops in at this point. Node [0] is the root document node so this will always
+            have length of at least 1.
+            </param>
+            <returns> A file image of the referenced bitmap.
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.getImport(net.windward.tags.ImportTag,net.windward.datasource.DataSourceNode[])">
+            <summary> Called for an import tag. Returns the name of the resource to be parsed and inserted into the report. Windward
+            Reports will process the returned string based on the tag type attribute. Return a 0 length string for an empty
+            node. Return null if the requested node does not exist. Windward Reports uses the type and source attributes on
+            this returned value. This method cannot affect those attributes.
+            
+            </summary>
+            <param name="tag">The values that identify the datasource node to read.
+            </param>
+            <param name="stack">The stack of forEach loops in at this point. Node [0] is the root document node so this will always
+            have length of at least 1.
+            </param>
+            <returns> The text to insert into the report.
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.getLink(net.windward.tags.BaseTag,net.windward.datasource.DataSourceNode[])">
+            <summary> Called for a link tag. Returns the link text that is the url for the link. Return a 0 length string
+            for an empty node. Return null if the requested node does not exist.
+            
+            </summary>
+            <param name="tag">The values that identify the datasource node to read.
+            </param>
+            <param name="stack">The stack of forEach loops in at this point. Node [0] is the root document node so this will always
+            have length of at least 1.
+            </param>
+            <returns> The url for a link.
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.getOut(net.windward.tags.OutTag,net.windward.datasource.DataSourceNode[],java.util.Locale,net.windward.util.macro.IMacroState)">
+            <summary> Called for an out tag. Returns the text to be inserted into the report. Return a 0 length string
+            for an empty node. Return null if the requested node does not exist and there is no default value.
+            
+            </summary>
+            <param name="tag">The values that identify the datasource node to read.
+            </param>
+            <param name="stack">The stack of forEach loops in at this point. Node [0] is the root document node so this will always
+            have length of at least 1.
+            </param>
+            <param name="locale">The locale to produce the output in.
+            </param>
+            <returns> The text to insert into the report.
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.getOutStream(net.windward.tags.OutTag,net.windward.datasource.DataSourceNode[],net.windward.util.macro.IMacroState)">
+            <summary> Called for an out tag. Returns the raw bytes of a node. This is used to read a rtf or xml file from the database.
+            Return a 0 length stream for an empty node. Return null if the requested node does not exist and there is no
+            default value.
+            
+            </summary>
+            <param name="tag">  The values that identify the datasource node to read.
+            </param>
+            <param name="stack">The stack of forEach loops in at this point. Node [0] is the root document node so this will always
+            have length of at least 1.
+            </param>
+            <returns> The text to insert into the report.
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.getData(net.windward.tags.ChartTag,net.windward.datasource.DataSourceNode[],java.util.Locale)">
+            <summary> Returns a set of data used to create a chart. The structure of this is tied tightly to the chart package.
+            
+            </summary>
+            <param name="tag">  The wr:chart tag with the select setting to use.
+            </param>
+            <param name="stack">The stack of forEach loops in at this point. Node [0] is the root document node so this will always
+            have length of at least 1.
+            </param>
+            <param name="locale">The locale to produce the output in.
+            </param>
+            <returns> The data used by the charting functions to create the chart.
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.isExistingNode(net.windward.tags.BaseTag,net.windward.datasource.DataSourceNode[])">
+            <summary> Return true if the passed in node exists. This should return true even if the passed in node is empty. This
+            method needs to be fast.
+            
+            </summary>
+            <param name="tag">The values that identify the datasource node to read.
+            </param>
+            <param name="stack">The stack of forEach loops in at this point. Node [0] is the root document node so this will always
+            have length of at least 1.
+            </param>
+            <returns> True if the node exists, false otherwise.
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.evaluate(System.String,net.windward.datasource.DataSourceNode[],net.windward.util.macro.IMacroState)">
+            <summary> Evaluate an expression for the boolean result.
+            
+            </summary>
+            <param name="text">The expression to evaluate.
+            </param>
+            <param name="stack">The stack of forEach loops in at this point. Node [0] is the root document node so this will always
+            have length of at least 1.
+            </param>
+            <returns> true or false.
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.isIf(net.windward.tags.IfTag,net.windward.datasource.DataSourceNode[],net.windward.util.macro.IMacroState)">
+            <summary> Called for an if tag. Returns if the node exists. This normally is identical to isExistingNode() but can be
+            different as this determines if an &lt;wr:if ... &gt; tag will return true while isExistingNode is used
+            in numerous other cases.
+            
+            </summary>
+            <param name="tag">The values that identify the datasource node to read.
+            </param>
+            <param name="stack">The stack of forEach loops in at this point. Node [0] is the root document node so this will always
+            have length of at least 1.
+            </param>
+            <returns> True if the node exists, false otherwise.
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.addSwitch(net.windward.tags.SwitchTag,net.windward.datasource.DataSourceNode[])">
+            <summary>
+            Called for a switch tag. Adds this switch to the list of switch the document holds. This switch will continue 
+            until the endSwitch is called.
+            </summary>
+            <param name="tag">The values that identify the datasource node to read.</param>
+            <param name="stack">The stack of forEach loops in at this point. Node [0] is the root document node so this will always 
+            have length of at least 1.</param>
+            <returns>true if no select. For a select, true if returned 1 or more rows of data. false if no data.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.isCase(net.windward.tags.CaseTag,net.windward.datasource.DataSourceNode[],net.windward.util.macro.IMacroState)">
+            <summary>
+            Called for a case tag. Returns if the case is true. This normally is identical to isExistingNode() but can be 
+            different as this determines if an &lt;wr:case ... &gt; tag will return true while isExistingNode is used 
+            in numerous other cases.
+            </summary>
+            <param name="tag">The values that identify the datasource node to read.</param>
+            <param name="stack">The stack of forEach loops in at this point. Node [0] is the root document node so this will always 
+            have length of at least 1.</param>
+            <returns>True if the case is true, false otherwise.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.endSwitch(net.windward.tags.EndSwitchTag,net.windward.datasource.DataSourceNode[])">
+            <summary>
+            Called when a switch ends. Will pop the innermost switch off the internal stack.
+            </summary>
+            <param name="tag">The values that identify the datasource node to read.</param>
+            <param name="stack">The stack of forEach loops in at this point. Node [0] is the root document node so this will always 
+            have length of at least 1.</param>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.iterator(net.windward.tags.ForEachTag,net.windward.datasource.DataSourceNode[])">
+            <summary> Called for a forEach tag. Returns an iterator used to walk through the nodes that match the forEach tag. It
+            is the responsibility of this iterator to handle begin, step, and end in the tag. If there are no nodes, an
+            iterator that will return false on the first call to hasNext() should be returned.<br/>
+            Windward Reports will never request multiple simultaneous iterators from a DataSourceNode. When this method
+            is called, any iterators from previous calls to this method are no longer in use. This restriction is critical
+            for the functionality of the method getIterator().
+            
+            </summary>
+            <param name="tag">The values that identify the datasource node to read.
+            </param>
+            <param name="stack">The stack of forEach loops in at this point. Node [0] is the root document node so this will always
+            have length of at least 1.
+            </param>
+            <returns> An iterator to walk the nodes that match.
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.getIterator">
+            <summary>
+            Returns the iterator presently in use for this node. This is <b>not</b> the method called when processing
+            a forEach tag. The method called to process a forEach tag is iterator(). This method is called to get the
+            iterator in use for a node.<br/>
+            Windward Reports will never request multiple simultaneous iterators from a DataSourceNode. This restriction
+            is critical for the functionality of this method.
+            This is <b>not</b> the iterator that returned this in it's iteration. It is the iterator created by this node
+            and is returning nodes 1 level higher in the node stack. For example, stack[0] holds the iterator for the
+            node at stack[1]. And by definition, the node at the top of the stack cannot have an iterator (because if it
+            did, the first node returned by that iterator would then be on the top of the stack).
+            </summary>
+            <returns>The iterator in use for this node. Will return null if no iterator is in use for this node.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.addQuery(net.windward.tags.QueryTag,net.windward.datasource.DataSourceNode[])">
+            <summary> Called for a query tag. Adds this query to the list of queries the document holds. This query will continue
+            to exist after this node is gone.
+            
+            </summary>
+            <param name="tag">The values that identify the datasource node to read.
+            </param>
+            <param name="stack">The stack of forEach loops in at this point. Node [0] is the root document node so this will always
+            have length of at least 1.
+            </param>
+            <returns>true if returned 1 or more rows of data. false if no data.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.addSet(net.windward.tags.SetTag,net.windward.datasource.DataSourceNode[],net.windward.util.macro.IMacroState)">
+            <summary> 
+            Called for a set tag. Adds this set to the list of name:value pairs in the document map. This set will continue
+            to exist after this node is gone. This is also called in psuedo mode (always a value=) for OutTags that have a var.
+            </summary>
+            <param name="tag">The tag with a name value pair.</param>
+            <param name="stack">The stack of forEach loops in at this point. Node [0] is the root document node so this will always
+            have length of at least 1.
+            </param>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.close">
+            <summary> We are done with this node. Used to close any resources opened by this object.</summary>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.getCursor">
+            <summary>
+            Returns the underlying XPathNavigator this node presently holds.
+            </summary>
+            <returns>The underlying XPathNavigator this node presently holds.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.getVariableValue(System.String,net.windward.datasource.DataSourceNode[],java.util.Locale)">
+            <summary>
+            Evaluate a variable
+            </summary>
+            <param name="variable">The name of the variable</param>
+            <param name="stack">Data sources</param>
+            <param name="locale">The set locale</param>
+            <returns>The evaluated result of a variable</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.getEquationData(System.String,net.windward.datasource.DataSourceNode[],java.util.Locale)">
+            <summary>
+            Evaluate a data query for the equation system 
+            </summary>
+            <param name="quer">The data query</param>
+            <param name="stack"> Data sources</param>
+            <param name="locale">The set locale</param>
+            <returns>The evaluated result of a variable</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.parse(System.String,net.windward.datasource.DataSourceNode[],System.Boolean,System.Boolean,System.Collections.ArrayList@)">
+            <summary>
+            Parses the string attr and where it finds var and varStatus items from a DataSourceNode makes the appropiate
+            substitution. The substitution is:<br/>
+            For varStatus.count and varStatus.index it will substitute in the number. For varStatus.first and
+            varStatus.last it will substitute in the word true() or false(). In both cases there is no spacing or quotes added,
+            just the number or word.<br/>
+            For var it will substitute in the text from the appropiate DbDataReader. Again, it will add no spacing or quotes.<br/>
+            This starts with the innermost node and works out to the document root. So if two nodes have the same value
+            for var and/or varStatus, it will use the inner one.
+            </summary>
+            <param name="attr">The string to be parsed for var and varStatus items.</param>
+            <param name="stack">The stack of forEach nodes we are in at this point. stack[0] is the document root (which has no iterator).</param>
+            <param name="addQuotes">If true put quote marks around strings.</param>
+            <param name="isSelect">Is for a select statement</param>
+            <param name="parameters">An array of objects that are the parameters for this select.</param>
+            <returns>The substituted string.</returns>
+        </member>
+        <member name="T:SharePointDataSourceDriver.SharePointDataSource.AdoNode.AdoIterator">
+            <summary>
+            The DataSourceIterator implementation for this datasource provider.
+            </summary>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.AdoIterator.#ctor(SharePointDataSourceDriver.SharePointDataSource.AdoNode,net.windward.tags.ForEachTag,net.windward.datasource.DataSourceNode[])">
+            <summary>
+            Create the iterator object.
+            </summary>
+            <param name="parent">The parent node iterating on.</param>
+            <param name="tag">The tag requestiong the iteration.</param>
+            <param name="stack">The node stack at the tag location.</param>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.AdoIterator.getTag">
+            <summary> Return the forEach tag in use for this iterator. This is the tag that is the start of a block in the report that
+            this iterator is iterating through.
+            
+            </summary>
+            <returns> the forEach tag in use for this iterator.
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.AdoIterator.hasNext">
+            <summary>
+            Returns true if the iteration has more nodes. (In other words, returns true if next would return a
+            node rather than throwing an exception.)
+            </summary>
+            <returns>true if the iterator has more elements.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.AdoIterator.next">
+            <summary>
+            Returns the next node in the iteration. This will always return an object of type AdoNode.
+            </summary>
+            <returns>the next element in the iteration.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.AdoIterator.getNode(System.Int32)">
+            <summary> Returns the requested node from the set of nodes presently on. Index must be less than the step size. Unlike
+            next() calling this method does not advance the dataset.
+            
+            </summary>
+            <param name="offset">The offset from the base node on. A value of 0 is identical to the value returned by next.
+            </param>
+            <returns> The node at this offset.
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.AdoIterator.remove">
+            <summary> This will throw an UnsupportedOperationException.</summary>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.AdoIterator.getIndex">
+            <summary> Return the index the iteration is on. This is a 0-based number of the index into the node list and counts all
+            nodes including those skipped if step > 1. This is undefined before the first call to next and is 0 after the
+            first call to next.
+            
+            </summary>
+            <returns> The index presently on.
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.AdoIterator.getCount">
+            <summary> Return the count the iteration is on. This is a 1-based number of the number of nodes returned so far. It only
+            counts nodes returned. This is undefined before the first call to next and is 1 after the first call to next.
+            
+            </summary>
+            <returns> The number of nodes returned so far..
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.AdoIterator.isFirst">
+            <summary> Return true if on the first node returned. This is undefined before the first call to next and is true after the
+            first call to next.
+            
+            </summary>
+            <returns> true if on the first node, false otherwise.
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.AdoIterator.isLast">
+            <summary> Return true if on the last node returned. This is undefined before the first call to next and is true after the
+            call to next which returns the last node that will be returned.
+            
+            </summary>
+            <returns> true if on the last node, false otherwise.
+            </returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.AdoIterator.getResultSet">
+            <summary>
+            Returns the result set this iterator presently holds. This is implementation specific.
+            </summary>
+            <returns>the result set this iterator presently holds.</returns>
+        </member>
+        <member name="M:SharePointDataSourceDriver.SharePointDataSource.AdoNode.AdoIterator.close">
+            <summary> We are done with this iterator. Used to close any resources opened by this object.</summary>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSAuthentication.Authentication">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSAuthentication.Authentication.#ctor">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSAuthentication.Authentication.LoginCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSAuthentication.Authentication.ModeCompleted">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSAuthentication.Authentication.Login(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSAuthentication.Authentication.LoginAsync(System.String,System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSAuthentication.Authentication.LoginAsync(System.String,System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSAuthentication.Authentication.Mode">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSAuthentication.Authentication.ModeAsync">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSAuthentication.Authentication.ModeAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSAuthentication.Authentication.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSAuthentication.LoginResult">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSAuthentication.LoginResult.CookieName">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSAuthentication.LoginResult.ErrorCode">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSAuthentication.LoginResult.TimeoutSeconds">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSAuthentication.LoginErrorCode">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSAuthentication.LoginErrorCode.NoError">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSAuthentication.LoginErrorCode.NotInFormsAuthenticationMode">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSAuthentication.LoginErrorCode.PasswordNotMatch">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSAuthentication.AuthenticationMode">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSAuthentication.AuthenticationMode.None">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSAuthentication.AuthenticationMode.Windows">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSAuthentication.AuthenticationMode.Passport">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSAuthentication.AuthenticationMode.Forms">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSAuthentication.LoginCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSAuthentication.LoginCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSAuthentication.LoginCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSAuthentication.ModeCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSAuthentication.ModeCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSAuthentication.ModeCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSCopy.Copy">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSCopy.Copy.#ctor">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSCopy.Copy.CopyIntoItemsLocalCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSCopy.Copy.CopyIntoItemsCompleted">
+            <remarks/>
+        </member>
+        <member name="E:SharePointDataSourceDriver.WSSCopy.Copy.GetItemCompleted">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSCopy.Copy.CopyIntoItemsLocal(System.String,System.String[],SharePointDataSourceDriver.WSSCopy.CopyResult[]@)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSCopy.Copy.CopyIntoItemsLocalAsync(System.String,System.String[])">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSCopy.Copy.CopyIntoItemsLocalAsync(System.String,System.String[],System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSCopy.Copy.CopyIntoItems(System.String,System.String[],SharePointDataSourceDriver.WSSCopy.FieldInformation[],System.Byte[],SharePointDataSourceDriver.WSSCopy.CopyResult[]@)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSCopy.Copy.CopyIntoItemsAsync(System.String,System.String[],SharePointDataSourceDriver.WSSCopy.FieldInformation[],System.Byte[])">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSCopy.Copy.CopyIntoItemsAsync(System.String,System.String[],SharePointDataSourceDriver.WSSCopy.FieldInformation[],System.Byte[],System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSCopy.Copy.GetItem(System.String,SharePointDataSourceDriver.WSSCopy.FieldInformation[]@,System.Byte[]@)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSCopy.Copy.GetItemAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSCopy.Copy.GetItemAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:SharePointDataSourceDriver.WSSCopy.Copy.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSCopy.CopyResult">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSCopy.CopyResult.ErrorCode">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSCopy.CopyResult.ErrorMessage">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSCopy.CopyResult.DestinationUrl">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSCopy.CopyErrorCode">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.CopyErrorCode.Success">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.CopyErrorCode.DestinationInvalid">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.CopyErrorCode.DestinationMWS">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.CopyErrorCode.SourceInvalid">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.CopyErrorCode.DestinationCheckedOut">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.CopyErrorCode.InvalidUrl">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.CopyErrorCode.Unknown">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSCopy.FieldInformation">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSCopy.FieldInformation.Type">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSCopy.FieldInformation.DisplayName">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSCopy.FieldInformation.InternalName">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSCopy.FieldInformation.Id">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSCopy.FieldInformation.Value">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSCopy.FieldType">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.Invalid">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.Integer">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.Text">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.Note">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.DateTime">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.Counter">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.Choice">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.Lookup">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.Boolean">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.Number">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.Currency">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.URL">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.Computed">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.Threading">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.Guid">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.MultiChoice">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.GridChoice">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.Calculated">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.File">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.Attachments">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.User">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.Recurrence">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.CrossProjectLink">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.ModStat">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.AllDayEvent">
+            <remarks/>
+        </member>
+        <member name="F:SharePointDataSourceDriver.WSSCopy.FieldType.Error">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSCopy.CopyIntoItemsLocalCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSCopy.CopyIntoItemsLocalCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSCopy.CopyIntoItemsLocalCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSCopy.CopyIntoItemsLocalCompletedEventArgs.Results">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSCopy.CopyIntoItemsCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSCopy.CopyIntoItemsCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSCopy.CopyIntoItemsCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSCopy.CopyIntoItemsCompletedEventArgs.Results">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSCopy.GetItemCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:SharePointDataSourceDriver.WSSCopy.GetItemCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSCopy.GetItemCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSCopy.GetItemCompletedEventArgs.Fields">
+            <remarks/>
+        </member>
+        <member name="P:SharePointDataSourceDriver.WSSCopy.GetItemCompletedEventArgs.Stream">
+            <remarks/>
+        </member>
+        <member name="T:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand">
+            <summary>
+            A command for SharePoint list data providers.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.query">
+            <summary>
+            the CAML Query element
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.viewFields">
+            <summary>
+            the CAML ViewFields element
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand._conn">
+            <summary>
+            the connection this command operates on
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.loadCamlElements">
+            <summary>
+            loads the CAML elements like query, viewFields, ...
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="cmdText"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.#ctor(System.String,Kailua.net.windward.utils.ado.SPList.custom.SPListConnection)">
+            <summary>
+            
+            </summary>
+            <param name="cmdText"></param>
+            <param name="conn"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.Cancel">
+            <summary>
+            Not supported.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.CommandText">
+            <summary>
+            Gets or sets the command text.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.CommandTimeout">
+            <summary>
+            Gets or sets the command timeout value.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.CommandType">
+            <summary>
+            Gets or sets the command type.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.ExecuteNonQuery">
+            <summary>
+            Not supported.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.createSPListDataReader">
+            <summary>
+            Executes the list service query and returns an SPListDataReader.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.ExecuteScalar">
+            <summary>
+            Executes the query, and returns the first column of the first row in the resultset
+            returned by the query. Extra columns or rows are ignored.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.Prepare">
+            <summary>
+            Not supported.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.UpdatedRowSource">
+            <summary>
+            Not supported.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.Dispose">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.executeAndCreateDataSet">
+            <summary>
+            Executes the query to the list service and creates a DataSet containing the query results.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.executeAndCreateDataTable">
+            <summary>
+            Executes the query to the list service and creates a DataTable containing the query results.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.CreateSchemaDataTable(Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter)">
+            <summary>
+            Creates the schema data table
+            </summary>
+            <param name="listServiceAdapter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.addColToSchema(System.Data.DataTable,System.Xml.XmlNode)">
+            <summary>
+            Adds the specified column info to the specifed schema table
+            </summary>
+            <param name="schemaTable"></param>
+            <param name="ndCol"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.CreateDataSet(System.Xml.XmlNode,Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter)">
+            <summary>
+            Creates a DataSet from the XML SPListItem document.
+            </summary>
+            <param name="listItems">the XML returned from a query to the SPListWebServiceAdapter</param>
+            <param name="listServiceAdapter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.CreateDataTable(System.Xml.XmlNode,System.Data.DataTable)">
+            <summary>
+            Creates a DataTable from the XML SPListItem document.
+            </summary>
+            <param name="listItems"></param>
+            <param name="schemaTable"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.prepListSvcQuery">
+            <summary>
+            Prepares an SPListWebServiceAdapter for query to the list service.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.CreateDbParameter">
+            <summary>
+            Creates a new SPListParameter.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.DbConnection">
+            <summary>
+            Gets the connection associated with this command.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.DbParameterCollection">
+            <summary>
+            Gets the SPListParameterCollection.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.DbTransaction">
+            <summary>
+            Not implemented.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.DesignTimeVisible">
+            <summary>
+            Not implemented.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListCommand.ExecuteDbDataReader(System.Data.CommandBehavior)">
+            <summary>
+            Executes the command, generating a new SPListDataReader.
+            </summary>
+            <param name="behavior"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection">
+            <summary>
+            A connection for a SharePoint list data provider.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.state">
+            <summary>
+            eg, open, closed, etc...
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.listServiceAdapter">
+            <summary>
+            list web service adapter; makes the actual queries to the list web service
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.#ctor">
+            <summary>
+            Creates a default connection with no connection properties set.  You must set the connection string.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.#ctor(System.String)">
+            <summary>
+            Creates a connection using the specified connection string.  The connection string should be like
+            URL=URL;WEB={GUID};LIST={GUID};VIEW={GUID};USER=USERNAME;PASSWORD=PASSWORD;DOMAIN=DOMAIN;.
+            </summary>
+            <param name="connectionString"></param>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.ConnectionString">
+            <summary>
+            Gets or sets the connection string.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.ConnectionTimeout">
+            <summary>
+            Not supported.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.Database">
+            <summary>
+            Not supported.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.State">
+            <summary>
+            Gets the connection state.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.BeginTransaction(System.Data.IsolationLevel)">
+            <summary>
+            Not supported.
+            </summary>
+            <param name="il"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.BeginTransaction">
+            <summary>
+            Not supported.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.ChangeDatabase(System.String)">
+            <summary>
+            Not supported.
+            </summary>
+            <param name="databaseName"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.Close">
+            <summary>
+            Closes the connection.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.CreateCommand">
+            <summary>
+            Creates an SPListCommand for this connection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.Open">
+            <summary>
+            Opens the connection.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.Dispose">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.parseConnectionString">
+            <summary>
+            Gets the info out of the connection string and assigns it to the
+            listService.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.ParseConnectionString(System.String)">
+            <summary>
+            Parses the connection string into a Hashtable.  The connection string must be of the
+            form "KEY1=VAL1;KEY2=VAL2;...KEYN=VALN;".
+            </summary>
+            <param name="connStr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.BeginDbTransaction(System.Data.IsolationLevel)">
+            <summary>
+            Not supported.
+            </summary>
+            <param name="isolationLevel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.CreateDbCommand">
+            <summary>
+            Creates a new database command.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.DataSource">
+            <summary>
+            Not supported.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListConnection.ServerVersion">
+            <summary>
+            Not supported.
+            </summary>
+        </member>
+        <member name="T:Kailua.net.windward.utils.ado.SPList.custom.SPListDataAdapter">
+            <summary>
+            A data adapter for SharePoint list data providers.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListDataAdapter.SelectCommand">
+            <summary>
+            Gets or sets the select command.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataAdapter.Fill(System.Data.DataSet)">
+            <summary>
+            Executes the SelectCommand and fills the specified DataSet with the query result.
+            </summary>
+            <param name="dataSet"></param>
+            <returns>the number of rows in the query result</returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataAdapter.FillSchema(System.Data.DataSet,System.Data.SchemaType)">
+            <summary>
+            Not supported.
+            </summary>
+            <param name="dataSet"></param>
+            <param name="schemaType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataAdapter.GetFillParameters">
+            <summary>
+            Not supported.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListDataAdapter.MissingMappingAction">
+            <summary>
+            Not supported.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListDataAdapter.MissingSchemaAction">
+            <summary>
+            Not supported.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListDataAdapter.TableMappings">
+            <summary>
+            Not supported
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataAdapter.Update(System.Data.DataSet)">
+            <summary>
+            Not supported
+            </summary>
+            <param name="dataSet"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader">
+            <summary>
+            A data reader for SharePoint list data providers.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.depth">
+             Currently (5/17/10) this is a thin wrapper around DataTableReader.
+            
+            <summary>
+            the nesting level of the current row
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.#ctor(System.Data.DataTableReader)">
+            <summary>
+            Creates a new SPListDataReader.  This is a thin wrapper around the DataTableReader class.
+            </summary>
+            <param name="reader"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.Close">
+            <summary>
+            Closes the reader.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.Depth">
+            <summary>
+            Returns the depth of nesting for the current row of the reader.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetSchemaTable">
+            <summary>
+            Gets the schema table.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.IsClosed">
+            <summary>
+            Indicates if the reader is closed.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.NextResult">
+            <summary>
+            Advances the reader to the next result set if any.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.Read">
+            <summary>
+            Advances the reader to the next record.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.RecordsAffected">
+            <summary>
+            Gets the number of rows inserted, changed, or deleted by execution of the SQL statement.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.FieldCount">
+            <summary>
+            Returns the number of columns in the current row.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetBoolean(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a bool.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetByte(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a byte.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetBytes(System.Int32,System.Int64,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Reads a stream of bytes starting at the specified column offset into the
+            buffer as an array starting at the specified buffer offset.
+            </summary>
+            <param name="i"></param>
+            <param name="fieldOffset"></param>
+            <param name="buffer"></param>
+            <param name="bufferoffset"></param>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetChar(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a char.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetChars(System.Int32,System.Int64,System.Char[],System.Int32,System.Int32)">
+            <summary>
+            Returns the value of the specified column as a character array.
+            </summary>
+            <param name="i"></param>
+            <param name="fieldoffset"></param>
+            <param name="buffer"></param>
+            <param name="bufferoffset"></param>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetDataTypeName(System.Int32)">
+            <summary>
+            Gets a string representing the data type of the specified column.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetDateTime(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a DateTime.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetDecimal(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a decimal.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetDouble(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a double.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetFieldType(System.Int32)">
+            <summary>
+            Gets the System.Type of the object.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetFloat(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a float.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetGuid(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a Guid.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetInt16(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a short.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetInt32(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a int.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetInt64(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a long.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetName(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a string.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetOrdinal(System.String)">
+            <summary>
+            Gets the column ordinal, given the name of the column.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetString(System.Int32)">
+            <summary>
+            Gets the value of the specified column as a string.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetValue(System.Int32)">
+            <summary>
+            Gets the value of the specified column as an object.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetValues(System.Object[])">
+            <summary>
+            Gets an array of objects that contains values from the current row.
+            </summary>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.IsDBNull(System.Int32)">
+            <summary>
+            Indicates if the column contains a null value.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.Item(System.String)">
+            <summary>
+            Gets the value of the specified column in its native format given the column name.
+            </summary>
+            <param name="name">the name of the column</param>
+            <returns></returns>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.Item(System.Int32)">
+            <summary>
+            Gets the value of the specified column in its native format given the column ordinal.
+            </summary>
+            <param name="i">The zero-based column ordinal.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.GetEnumerator">
+            <summary>
+            Gets an enumerator that can be used to iterate through the item collection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListDataReader.HasRows">
+            <summary>
+            Indicates if the reader has one or more rows.
+            </summary>
+        </member>
+        <member name="T:Kailua.net.windward.utils.ado.SPList.custom.SPListParameter">
+            <summary>
+            A query parameter.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameter.#ctor">
+            <summary>
+            Creates a new SPListParameter.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListParameter.DbType">
+            <summary>
+            Gets or sets the DbType.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListParameter.Direction">
+            <summary>
+            Gets or sets the ParameterDirection.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListParameter.IsNullable">
+            <summary>
+            Gets or sets whether this parameter is nullable.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListParameter.ParameterName">
+            <summary>
+            Gets or sets the parameter's name.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListParameter.Size">
+            <summary>
+            Gets or sets the maximum size in bytes of the parameter's value.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListParameter.SourceColumn">
+            <summary>
+            Gets or sets the source column name.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListParameter.SourceColumnNullMapping">
+            <summary>
+            Gets or sets whether the source column is nullable.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListParameter.SourceVersion">
+            <summary>
+            Gets or sets the System.Data.DataRowVersion to use when you load System.Data.Common.DbParameter.Value.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListParameter.Value">
+            <summary>
+            Gets or sets the parameter's value.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameter.InferType(System.Object)">
+            <summary>
+            Returns the DbType of the specified <paramref name="value"/>.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameter.ResetDbType">
+            <summary>
+            Resets the DbType
+            </summary>
+        </member>
+        <member name="T:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection">
+            <summary>
+            A collection of SPListParameter objects.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.#ctor">
+            <summary>
+            Creates a new SPListParameterCollection.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.Count">
+            <summary>
+            Gets the number of items in the collection.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.IsFixedSize">
+            <summary>
+            Gets whether the collection is fixed size.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.IsReadOnly">
+            <summary>
+            Gets whether the collection is readonly.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.IsSynchronized">
+            <summary>
+            Gets whether the collection is synchronized.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.SyncRoot">
+            <summary>
+            Gets an object that can be used to synchronize access to the collection.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.Add(System.Object)">
+            <summary>
+            Adds the parameter to the collection.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.AddRange(System.Array)">
+            <summary>
+            Adds the array of values to the parameter collection.
+            </summary>
+            <param name="values"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.Clear">
+            <summary>
+            Clears the collection.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.Contains(System.String)">
+            <summary>
+            Returns true if the collection contains a parameter with the specified name.
+            </summary>
+            <param name="value">A non-null string value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.Contains(System.Object)">
+            <summary>
+            Returns true if the collection contains a parameter with the specified value.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.CopyTo(System.Array,System.Int32)">
+            <summary>
+            Copies an array of items to the collection starting at the specified index.
+            </summary>
+            <param name="array"></param>
+            <param name="index"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.ValidateRange(System.Array)">
+            <summary>
+            Throws a DataException if any value is not of type SPListParameter.
+            </summary>
+            <param name="values"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.GetEnumerator">
+            <summary>
+            Gets an enumerator for the collection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.GetParameter(System.String)">
+            <summary>
+            Gets the specified SPListParameter or null if no such parameter exists.
+            </summary>
+            <param name="parameterName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.GetParameter(System.Int32)">
+            <summary>
+            Gets the specified SPListParameter.
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.IndexOf(System.String)">
+            <summary>
+            Returns the index of the parameter with the specified name.
+            </summary>
+            <param name="parameterName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.IndexOf(System.Object)">
+            <summary>
+            Returns the index of the parameter with the specified value.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.Insert(System.Int32,System.Object)">
+            <summary>
+            Inserts the parameter at the specified index in the collection.
+            </summary>
+            <param name="index"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.Remove(System.Object)">
+            <summary>
+            Removes the specified parameter from the list.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.RemoveAt(System.String)">
+            <summary>
+            Removes the parameter having the specified name from the collection.
+            </summary>
+            <param name="parameterName"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.RemoveAt(System.Int32)">
+            <summary>
+            Removes the parameter at the specified index from the collection.
+            </summary>
+            <param name="index"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.SetParameter(System.String,System.Data.Common.DbParameter)">
+            <summary>
+            Replaces the parameter having the specified name with the specified parameter.
+            </summary>
+            <param name="parameterName"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListParameterCollection.SetParameter(System.Int32,System.Data.Common.DbParameter)">
+            <summary>
+            Replaces the parameter at the specified index with the specified parameter.
+            </summary>
+            <param name="index"></param>
+            <param name="value"></param>
+        </member>
+        <member name="T:Kailua.net.windward.utils.ado.SPList.custom.SPListProviderFactory">
+            <summary>
+            Provider factory for SPList data providers.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListProviderFactory.Instance">
+            <summary>
+            Gets the single, static instance of SPListProviderFactory.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListProviderFactory.CreateConnection">
+            <summary>
+            Creates a new SPListConnection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListProviderFactory.CreateCommand">
+            <summary>
+            Creates a new SPListCommand.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter">
+            <summary>
+            This class is a wrapper for SharePoint's Lists web service. To use it, create an instance with
+            the constructor, and then call the GetListItems method when you are ready to retrieve the XML.
+            The constructor is an augmented version of SharePoint's Lists.GetListItems web service method.
+            Please see the SharePoint documentation to understand this method.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter.serviceUrl">
+            <summary>
+            The url of the Lists web service.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter.credentials">
+            <summary>
+            Use to hold the username, password, and domain if necessary.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter.sListGuid">
+            <summary>
+            The list guid.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter.sViewGuid">
+            <summary>
+            The view guid.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter.query">
+            <summary>
+            The CAML query.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter.viewFields">
+            <summary>
+            The ViewFields element.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter.rowLimit">
+            <summary>
+            The row limit per page.  This is the number of records returned on each call.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter.queryOptions">
+            <summary>
+            Thew QueryOptions element.  The GetListItems method automatically pages through the entire result,
+            updating the QueryOptions/Paging element.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter.sWebID">
+            <summary>
+            The web guid.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter.cookieContainer">
+            <summary>
+            Use this to pass the forms auth token when using FBA. Default is null.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter.useFBA">
+            <summary>
+            Set true when using FBA, false otherwise. Default is false.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter.#ctor">
+            <summary>
+            Creates a new SPListWebServiceAdapter.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter.#ctor(System.String,System.Net.NetworkCredential,System.String,System.String,System.Xml.XmlNode,System.Xml.XmlNode,System.String,System.Xml.XmlNode,System.String)">
+            <summary>
+            The constructor is an augmented version of SharePoint's Lists.GetListItems web service method.
+            Please see the SharePoint documentation to understand this method.
+            </summary>
+            <param name="serviceUrl"></param>
+            <param name="credentials"></param>
+            <param name="sListGuid"></param>
+            <param name="sViewGuid"></param>
+            <param name="query"></param>
+            <param name="viewFields"></param>
+            <param name="rowLimit"></param>
+            <param name="queryOptions"></param>
+            <param name="sWebID"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter.GetListItems">
+            <summary>
+            Calls the Lists.GetListItems web service method with the parameters assigned when
+            the SPListWebService was created.  Automatically pages through the entire result
+            returning a single listitems document with all rows merged into listitems/rs:data.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter.GetListItemsSinglePage">
+            <summary>
+            Makes a single call to Lists.GetListItems and returns the result.  This is done
+            using the current values of sListGuid, sViewGuid, query, viewFields, rowLimit,
+            queryOptions, and sWebID.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.SPListWebServiceAdapter.getBookMarkNode(System.Xml.XmlNode)">
+            <summary>
+            Gets the server-supplied bookmark from the specified Lists.GetListItems result.
+            This is the attribute listitems/rs:data/@ListItemCollectionPositionNext.
+            </summary>
+            <param name="listResult"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Kailua.net.windward.utils.ado.SPList.custom.WrSPListColumn">
+            <summary>
+            A SharePoint List column.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.WrSPListColumn.fieldName">
+            <summary>
+            The "Name" attribute of the field.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListColumn.#ctor(System.String,System.String,System.Data.DbType)">
+            <summary>
+            Creates a new WrSPListColumn.
+            </summary>
+            <param name="name"></param>
+            <param name="fieldName"></param>
+            <param name="dbType"></param>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListColumn.FieldName">
+            <summary>
+            The "Name" attribute of the field.
+            </summary>
+        </member>
+        <member name="T:Kailua.net.windward.utils.ado.SPList.custom.WrSPListCommand2">
+            <summary>
+            A SharePoint List command/query.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListCommand2.#ctor(System.Data.Common.DbProviderFactory)">
+            <summary>
+            Creates a new WrSPListCommand2 object.
+            </summary>
+            <param name="providerFactory"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListCommand2.Set(System.Int32,System.Object)">
+            <summary>
+            Not implemented.
+            </summary>
+            <param name="ind"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListCommand2.ExecuteInsert(System.String)">
+            <summary>
+            Not implemented.
+            </summary>
+            <param name="pkName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListCommand2.ExecuteReader">
+            <summary>
+            Not implemented.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListCommand2.ExecuteReader(System.Data.CommandBehavior)">
+            <summary>
+            Not implemented.
+            </summary>
+            <param name="behavior"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListCommand2.CommandText">
+            <summary>
+            Not implemented.
+            </summary>
+        </member>
+        <member name="T:Kailua.net.windward.utils.ado.SPList.custom.WrSPListConnectionParams">
+            <summary>
+            This contains the parameters needed to create a connection string.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListConnectionParams.#ctor">
+            <summary>
+            Creates a new WrSPListConnectionParams with no info.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListConnectionParams.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Creates a new WrSPListConnectionParams with the specified settings.
+            </summary>
+            <param name="server"></param>
+            <param name="database"></param>
+            <param name="username"></param>
+            <param name="password"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListConnectionParams.testmethod">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2">
+            <summary>
+            A SharePoint List database.  This corresponds to a SharePoint website (SPWeb).
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2.spWebUrl">
+            <summary>
+            The url of the SPWeb.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2.listTitle">
+            <summary>
+            The list title
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2.listId">
+            <summary>
+            A GUID string for the list's ID field.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new WrSPListDatabase from the specified SPWeb url and list spec string.
+            The list spec string is a string like "ListName, {guid}".
+            </summary>
+            <param name="spWebUrl"></param>
+            <param name="listSpec"></param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Creates a new WrSPListDatabase using the specified SPWeb url and list info.
+            </summary>
+            <param name="spWebUrl"></param>
+            <param name="listTitle"></param>
+            <param name="listId"></param>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2.Name">
+            <summary>
+            The name of the database.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2.DefaultSchema">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2.Tables">
+            <summary>
+            All tables in this database. Must call LoadMetadata first.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2.Views">
+            <summary>
+            All views in this database. Must call LoadMetadata first.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2.StoredProcedures">
+            <summary>
+            Return all stored procedures in this database. Must call LoadMetadata first.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2.LoadMetadata(Kailua.net.windward.utils.WrCredentials,net.windward.utils.ado.WrVendor.ELEM_OWNER,net.windward.utils.ado.WrDatabase.LoadStatus)">
+            <summary>
+            Loads the metadata for this database.
+            </summary>
+            <param name="credentials">The user credentials to access the database.</param>
+            <param name="owner">Determines what metadata objects are read and if full metadata is retrieved.</param>
+            <param name="status">Pass the status of loading the metadata.</param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2.LoadMetadata(System.String,net.windward.utils.ado.WrVendor.ELEM_OWNER,net.windward.utils.ado.WrDatabase.LoadStatus)">
+            <summary>
+            Loads the metadata for this database.
+            </summary>
+            <param name="connStr">The connection string to access the database.</param>
+            <param name="owner">Determines what metadata objects are read and if full metadata is retrieved.</param>
+            <param name="status">Pass the status of loading the metadata.</param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2.GetTables(Kailua.net.windward.utils.WrCredentials,net.windward.utils.ado.WrVendor.ELEM_OWNER,System.Boolean)">
+            <summary>
+            Gets all the lists in the SPWeb as WrSPListTable objects.
+            </summary>
+            <param name="credentials"></param>
+            <param name="owner"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2.GetTables(System.String,net.windward.utils.ado.WrVendor.ELEM_OWNER)">
+            <summary>
+            Gets all the lists in the SPWeb as WrSPListTable objects.
+            </summary>
+            <param name="connStr"></param>
+            <param name="owner"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2.GetColumns(net.windward.utils.ado.WrBaseTable,Kailua.net.windward.utils.WrCredentials,net.windward.utils.ado.WrVendor.ELEM_OWNER,System.Boolean)">
+            <summary>
+            Gets all the fields in the SharePoint list identified by the specified table.
+            </summary>
+            <param name="table"></param>
+            <param name="credentials"></param>
+            <param name="owner"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2.GetColumns(net.windward.utils.ado.WrBaseTable,System.String,net.windward.utils.ado.WrVendor.ELEM_OWNER)">
+            <summary>
+            Gets all the fields in the SharePoint list identified by the specified table.
+            </summary>
+            <param name="table"></param>
+            <param name="connStr"></param>
+            <param name="owner"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListDatabase2.CreateListsService(Kailua.net.windward.utils.WrCredentials,System.Boolean)">
+            <summary>
+            Creates a Lists object (SharePoint list web service) using the current database settings and the specified credentials.
+            </summary>
+            <param name="credentials"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Kailua.net.windward.utils.ado.SPList.custom.WrSPListServer2">
+            <summary>
+            WrSPListServer creates IWrDatabase objects which can be queried for SharePoint list data.
+            Databases in this case are SharePoint websites (SPWeb).
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.WrSPListServer2.spWebUrl">
+            <summary>
+            The URL of the SPWeb to retrieve list data from.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListServer2.#ctor(System.String)">
+            <summary>
+            Creates a new WrSPListServer from the specified URL.
+            </summary>
+            <param name="url"></param>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListServer2.Name">
+            <summary>
+            The URL of the SPWeb to retrieve list data from.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListServer2.CreateDatabase(System.String,Kailua.net.windward.utils.WrCredentials)">
+            <summary>
+            Create a database object.
+            </summary>
+            <param name="database">The name of the database.</param>
+            <param name="credentials">The user credentials to access the database.</param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListServer2.GetDatabases(Kailua.net.windward.utils.WrCredentials)">
+            <summary>
+            Gets the list of databases for this server.  In this case, only a single WrSPListDatabase object is returned
+            for the specified SPWeb.
+            </summary>
+            <param name="credentials"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListServer2.GetDatabases(System.String)">
+            <summary>
+            Gets the list of databases for this server.  In this case, only a single WrSPListDatabase object is returned
+            for the specified SPWeb.
+            </summary>
+            <param name="connStr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListServer2.CreateWrCredentials(System.Collections.Hashtable)">
+            <summary>
+            Creates WrCredentials from the specified Hashtable of connection string key-pairs.
+            </summary>
+            <param name="keyPairs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListServer2.CompareTo(System.Object)">
+            <summary>
+            Not implemented.
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Kailua.net.windward.utils.ado.SPList.custom.WrSPListSyntax2">
+            <summary>
+            SharePoint List syntax handler.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListSyntax2.EncodeSelect(System.String)">
+            <summary>
+            Escapes any special characters in the passed in select.
+            </summary>
+            <param name="select">The unescaped select.</param>
+            <returns>The escaped select.</returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListSyntax2.ConvertSelect(System.String)">
+            <summary>
+            Not implemented.
+            </summary>
+            <param name="select"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListSyntax2.SafeTableName(System.String)">
+            <summary>
+            Create a safe table name. Generally needed only if the name has a space in it or is a reserved name.
+            </summary>
+            <param name="tableName">The true table name.</param>
+            <returns>The table name as it should be used in a select.</returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListSyntax2.SafeColumnName(System.String)">
+            <summary>
+            Create a safe column name. Generally needed only if the name has a space in it or is a reserved name.
+            </summary>
+            <param name="columnName">The true column name.</param>
+            <returns>The table name as it should be used in a select.</returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListSyntax2.SafeTableColumnName(System.String,System.String)">
+            <summary>
+            Create a safe table name. Generally needed only if the name has a space in it or is a reserved name.
+            </summary>
+            <param name="tableName">The true table name.</param>
+            <param name="columnName">The true column name.</param>
+            <returns>The table name as it should be used in a select.</returns>
+        </member>
+        <member name="T:Kailua.net.windward.utils.ado.SPList.custom.WrSPListTable">
+            <summary>
+            A table corresponding to a SharePoint list.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.WrSPListTable.listId">
+            <summary>
+            The ID GUID of the list.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListTable.#ctor(System.String,System.String,System.String,System.Boolean,net.windward.utils.ado.WrColumn[])">
+            <summary>
+            Creates a new WrSPListTable. This is exactly the same as a WrTable, but also contains
+            the list GUID.
+            </summary>
+            <param name="title"></param>
+            <param name="description"></param>
+            <param name="id"></param>
+            <param name="isSystem"></param>
+            <param name="columns"></param>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListTable.ListID">
+            <summary>
+            The ID GUID of the list.
+            </summary>
+        </member>
+        <member name="T:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2">
+            <summary>
+            Vendor for SharePoint list data sources.  This is like a DbProviderFactory.
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.FactoryClass">
+            <summary>
+            The DbProviderFactory class, "net.windward.utils.ado.SPList.custom.SPListProviderFactory".
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.FactoryDispName">
+            <summary>
+            The display name, "SharePoint List".
+            </summary>
+        </member>
+        <member name="F:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.PROVIDER_SUBTYPE">
+            <summary>
+            "SPList"
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.#ctor">
+            <summary>
+            Creates an SharePoint list vendor object.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Creates an SharePoint list vendor object.
+            </summary>
+            <param name="name">The friendly name of the provider.</param>
+            <param name="description">The description of this provider (optional).</param>
+            <param name="providerClass">The class of the provider.</param>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.loadSPListProviderFactory">
+            <summary>
+            Loads the splist provider factory. The splist provider factory cannot be loaded by a DbProviderFactories.GetFactory(string invariantName) 
+            call, because it is not registered that way, so we load it manually after the default constructor has run.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.CanEnumerateServers">
+            <summary>
+            Returns false. WrSPListVendor cannot enumerate servers.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.CanEnumerateDatabases">
+            <summary>
+            Returns true.  In this case, databases are SharePoint websites (SPWeb).
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.CanLaunchAdministrator">
+            <summary>
+            Returns false.  WrSPListVendor has no administrator program file.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.CanRunScripts">
+            <summary>
+            Returns false.  WrSPListVendor is readonly and cannot run DDL scripts.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.CanUseTrustedConnection">
+            <summary>
+            Returns true. WrSPListVendor2 can use Windows authentication.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.ConnectionString(System.String,System.String,Kailua.net.windward.utils.WrCredentials,System.Boolean)">
+            <summary>
+            Creates a connection string from the specified values.
+            </summary>
+            <param name="server">This is the server field in autotag. It should contain the URL to an SPWeb.</param>
+            <param name="database">This is the database field in autotag. It should be empty or contain a "ListName,{GUID}" string.</param>
+            <param name="credentials"></param>
+            <param name="showPassword">If true, the password will be placed in the connection string; else, "****" will appear.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.CreateConnStr(System.String,System.String,Kailua.net.windward.utils.WrCredentials,System.Boolean)">
+            <summary>
+            Creates a connection string from the specified values.
+            </summary>
+            <param name="server">This is the server field in autotag. It should contain the URL to an SPWeb.</param>
+            <param name="database">This is the database field in autotag. It should be empty or contain a "ListName,{GUID}" string.</param>
+            <param name="credentials"></param>
+            <param name="showPassword">If true, the password will be placed in the connection string; else, "****" will appear.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.ConnectionParams(System.String)">
+            <summary>
+            Creates WrConnectionParams from the specified connection string.
+            </summary>
+            <param name="connectionString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.CreateCommand">
+            <summary>
+            Creates a new WrSPListCommand.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.CreateServer(System.String)">
+            <summary>
+            Creates a new WrSPListServer from the specified URL.
+            </summary>
+            <param name="url">The URL of the SPWeb. For sql databases, this would instead be server name.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.DatabaseMode">
+            <summary>
+            Gets the WrVendor.DATABASE_MODE.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.IsInstalled">
+            <summary>
+            Indicates if the WrSPListVendor is installed.
+            </summary>
+        </member>
+        <member name="M:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.GetSPListDbProviderFactory">
+            <summary>
+            Gets Windward's SPList DbProviderFactory.  If the factory is not found, this will throw an exception.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.GUID">
+            <summary>
+            Uniquely defines a WrVendor. So Excel is distinct from Ole-DB.
+            </summary>
+        </member>
+        <member name="P:Kailua.net.windward.utils.ado.SPList.custom.WrSPListVendor2.ParameterFormat">
+            <summary>
+            Parameter format string, "&lt;param />".
+            </summary>
+        </member>
+    </members>
+</doc>

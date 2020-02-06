@@ -1,0 +1,16 @@
+C:\Users\molch\Desktop\синх2019\С#\Рубль\bin\Debug\rubles.txt
+C:\Users\molch\Desktop\синх2019\С#\Рубль\bin\Debug\Pluralize.exe.config
+C:\Users\molch\Desktop\синх2019\С#\Рубль\bin\Debug\Pluralize.exe
+C:\Users\molch\Desktop\синх2019\С#\Рубль\bin\Debug\Pluralize.pdb
+C:\Users\molch\Desktop\синх2019\С#\Рубль\obj\Debug\Pluralize.csprojAssemblyReference.cache
+C:\Users\molch\Desktop\синх2019\С#\Рубль\obj\Debug\Pluralize.csproj.CoreCompileInputs.cache
+C:\Users\molch\Desktop\синх2019\С#\Рубль\obj\Debug\Pluralize.exe
+C:\Users\molch\Desktop\синх2019\С#\Рубль\obj\Debug\Pluralize.pdb
+E:\data\С#\Рубль\bin\Debug\rubles.txt
+E:\data\С#\Рубль\bin\Debug\Pluralize.exe.config
+E:\data\С#\Рубль\bin\Debug\Pluralize.exe
+E:\data\С#\Рубль\bin\Debug\Pluralize.pdb
+E:\data\С#\Рубль\obj\Debug\Pluralize.csprojAssemblyReference.cache
+E:\data\С#\Рубль\obj\Debug\Pluralize.csproj.CoreCompileInputs.cache
+E:\data\С#\Рубль\obj\Debug\Pluralize.exe
+E:\data\С#\Рубль\obj\Debug\Pluralize.pdb

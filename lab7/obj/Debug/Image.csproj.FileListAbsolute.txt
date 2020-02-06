@@ -1,0 +1,8 @@
+C:\Users\molch\Desktop\синх2019\С#\lab7\bin\Debug\eurobot.bmp
+C:\Users\molch\Desktop\синх2019\С#\lab7\bin\Debug\Recognizer.exe.config
+C:\Users\molch\Desktop\синх2019\С#\lab7\bin\Debug\Recognizer.exe
+C:\Users\molch\Desktop\синх2019\С#\lab7\bin\Debug\Recognizer.pdb
+C:\Users\molch\Desktop\синх2019\С#\lab7\obj\Debug\Image.csprojAssemblyReference.cache
+C:\Users\molch\Desktop\синх2019\С#\lab7\obj\Debug\Image.csproj.CoreCompileInputs.cache
+C:\Users\molch\Desktop\синх2019\С#\lab7\obj\Debug\Recognizer.exe
+C:\Users\molch\Desktop\синх2019\С#\lab7\obj\Debug\Recognizer.pdb

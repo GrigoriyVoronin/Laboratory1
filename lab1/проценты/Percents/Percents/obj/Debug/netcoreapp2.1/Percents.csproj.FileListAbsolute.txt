@@ -1,0 +1,11 @@
+C:\Users\molch\Desktop\синх2019\С#\проценты\Percents\Percents\bin\Debug\netcoreapp2.1\Percents.deps.json
+C:\Users\molch\Desktop\синх2019\С#\проценты\Percents\Percents\bin\Debug\netcoreapp2.1\Percents.runtimeconfig.json
+C:\Users\molch\Desktop\синх2019\С#\проценты\Percents\Percents\bin\Debug\netcoreapp2.1\Percents.runtimeconfig.dev.json
+C:\Users\molch\Desktop\синх2019\С#\проценты\Percents\Percents\bin\Debug\netcoreapp2.1\Percents.dll
+C:\Users\molch\Desktop\синх2019\С#\проценты\Percents\Percents\bin\Debug\netcoreapp2.1\Percents.pdb
+C:\Users\molch\Desktop\синх2019\С#\проценты\Percents\Percents\obj\Debug\netcoreapp2.1\Percents.csprojAssemblyReference.cache
+C:\Users\molch\Desktop\синх2019\С#\проценты\Percents\Percents\obj\Debug\netcoreapp2.1\Percents.csproj.CoreCompileInputs.cache
+C:\Users\molch\Desktop\синх2019\С#\проценты\Percents\Percents\obj\Debug\netcoreapp2.1\Percents.AssemblyInfoInputs.cache
+C:\Users\molch\Desktop\синх2019\С#\проценты\Percents\Percents\obj\Debug\netcoreapp2.1\Percents.AssemblyInfo.cs
+C:\Users\molch\Desktop\синх2019\С#\проценты\Percents\Percents\obj\Debug\netcoreapp2.1\Percents.dll
+C:\Users\molch\Desktop\синх2019\С#\проценты\Percents\Percents\obj\Debug\netcoreapp2.1\Percents.pdb

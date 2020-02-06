@@ -1,0 +1,11 @@
+C:\Users\molch\source\repos\Expr10\Expr10\bin\Debug\netcoreapp2.1\Expr10.deps.json
+C:\Users\molch\source\repos\Expr10\Expr10\bin\Debug\netcoreapp2.1\Expr10.runtimeconfig.json
+C:\Users\molch\source\repos\Expr10\Expr10\bin\Debug\netcoreapp2.1\Expr10.runtimeconfig.dev.json
+C:\Users\molch\source\repos\Expr10\Expr10\bin\Debug\netcoreapp2.1\Expr10.dll
+C:\Users\molch\source\repos\Expr10\Expr10\bin\Debug\netcoreapp2.1\Expr10.pdb
+C:\Users\molch\source\repos\Expr10\Expr10\obj\Debug\netcoreapp2.1\Expr10.csprojAssemblyReference.cache
+C:\Users\molch\source\repos\Expr10\Expr10\obj\Debug\netcoreapp2.1\Expr10.csproj.CoreCompileInputs.cache
+C:\Users\molch\source\repos\Expr10\Expr10\obj\Debug\netcoreapp2.1\Expr10.AssemblyInfoInputs.cache
+C:\Users\molch\source\repos\Expr10\Expr10\obj\Debug\netcoreapp2.1\Expr10.AssemblyInfo.cs
+C:\Users\molch\source\repos\Expr10\Expr10\obj\Debug\netcoreapp2.1\Expr10.dll
+C:\Users\molch\source\repos\Expr10\Expr10\obj\Debug\netcoreapp2.1\Expr10.pdb

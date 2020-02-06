@@ -1,0 +1,7 @@
+\\vdiprofile\up$\st551-03\Desktop\1209\lab1\lab1\bin\Debug\lab1.exe.config
+\\vdiprofile\up$\st551-03\Desktop\1209\lab1\lab1\bin\Debug\lab1.exe
+\\vdiprofile\up$\st551-03\Desktop\1209\lab1\lab1\bin\Debug\lab1.pdb
+\\vdiprofile\up$\st551-03\Desktop\1209\lab1\lab1\obj\Debug\lab1.csprojAssemblyReference.cache
+\\vdiprofile\up$\st551-03\Desktop\1209\lab1\lab1\obj\Debug\lab1.csproj.CoreCompileInputs.cache
+\\vdiprofile\up$\st551-03\Desktop\1209\lab1\lab1\obj\Debug\lab1.exe
+\\vdiprofile\up$\st551-03\Desktop\1209\lab1\lab1\obj\Debug\lab1.pdb

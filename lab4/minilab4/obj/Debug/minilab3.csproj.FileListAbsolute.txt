@@ -1,0 +1,14 @@
+C:\Users\molch\Desktop\синх2019\С#\lab4\minilab4\obj\Debug\minilab3.csprojAssemblyReference.cache
+C:\Users\molch\Desktop\синх2019\С#\lab4\minilab4\obj\Debug\minilab3.csproj.CoreCompileInputs.cache
+C:\Users\molch\Desktop\синх2019\С#\lab4\minilab4\bin\Debug\minilab3.exe.config
+C:\Users\molch\Desktop\синх2019\С#\lab4\minilab4\bin\Debug\minilab3.exe
+C:\Users\molch\Desktop\синх2019\С#\lab4\minilab4\bin\Debug\minilab3.pdb
+C:\Users\molch\Desktop\синх2019\С#\lab4\minilab4\obj\Debug\minilab3.exe
+C:\Users\molch\Desktop\синх2019\С#\lab4\minilab4\obj\Debug\minilab3.pdb
+E:\data\С#\lab4\minilab4\bin\Debug\minilab3.exe.config
+E:\data\С#\lab4\minilab4\bin\Debug\minilab3.exe
+E:\data\С#\lab4\minilab4\bin\Debug\minilab3.pdb
+E:\data\С#\lab4\minilab4\obj\Debug\minilab3.csprojAssemblyReference.cache
+E:\data\С#\lab4\minilab4\obj\Debug\minilab3.csproj.CoreCompileInputs.cache
+E:\data\С#\lab4\minilab4\obj\Debug\minilab3.exe
+E:\data\С#\lab4\minilab4\obj\Debug\minilab3.pdb

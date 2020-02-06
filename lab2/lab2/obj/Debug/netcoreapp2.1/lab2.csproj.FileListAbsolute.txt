@@ -1,0 +1,11 @@
+C:\Users\molch\Desktop\синх2019\С#\lab2\lab2\bin\Debug\netcoreapp2.1\lab2.deps.json
+C:\Users\molch\Desktop\синх2019\С#\lab2\lab2\bin\Debug\netcoreapp2.1\lab2.runtimeconfig.json
+C:\Users\molch\Desktop\синх2019\С#\lab2\lab2\bin\Debug\netcoreapp2.1\lab2.runtimeconfig.dev.json
+C:\Users\molch\Desktop\синх2019\С#\lab2\lab2\bin\Debug\netcoreapp2.1\lab2.dll
+C:\Users\molch\Desktop\синх2019\С#\lab2\lab2\bin\Debug\netcoreapp2.1\lab2.pdb
+C:\Users\molch\Desktop\синх2019\С#\lab2\lab2\obj\Debug\netcoreapp2.1\lab2.csprojAssemblyReference.cache
+C:\Users\molch\Desktop\синх2019\С#\lab2\lab2\obj\Debug\netcoreapp2.1\lab2.csproj.CoreCompileInputs.cache
+C:\Users\molch\Desktop\синх2019\С#\lab2\lab2\obj\Debug\netcoreapp2.1\lab2.AssemblyInfoInputs.cache
+C:\Users\molch\Desktop\синх2019\С#\lab2\lab2\obj\Debug\netcoreapp2.1\lab2.AssemblyInfo.cs
+C:\Users\molch\Desktop\синх2019\С#\lab2\lab2\obj\Debug\netcoreapp2.1\lab2.dll
+C:\Users\molch\Desktop\синх2019\С#\lab2\lab2\obj\Debug\netcoreapp2.1\lab2.pdb

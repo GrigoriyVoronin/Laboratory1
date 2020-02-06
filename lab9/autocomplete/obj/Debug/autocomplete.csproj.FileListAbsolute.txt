@@ -1,0 +1,14 @@
+C:\Users\molch\Desktop\синх2019\С#\lab9\autocomplete\bin\Debug\dic\adjectives.txt
+C:\Users\molch\Desktop\синх2019\С#\lab9\autocomplete\bin\Debug\dic\nouns.txt
+C:\Users\molch\Desktop\синх2019\С#\lab9\autocomplete\bin\Debug\dic\verbs.txt
+C:\Users\molch\Desktop\синх2019\С#\lab9\autocomplete\bin\Debug\Autocomplete.exe.config
+C:\Users\molch\Desktop\синх2019\С#\lab9\autocomplete\bin\Debug\Autocomplete.exe
+C:\Users\molch\Desktop\синх2019\С#\lab9\autocomplete\bin\Debug\Autocomplete.pdb
+C:\Users\molch\Desktop\синх2019\С#\lab9\autocomplete\bin\Debug\nunit.framework.dll
+C:\Users\molch\Desktop\синх2019\С#\lab9\autocomplete\obj\Debug\autocomplete.csprojAssemblyReference.cache
+C:\Users\molch\Desktop\синх2019\С#\lab9\autocomplete\obj\Debug\Autocomplete.AutocompleteForm.resources
+C:\Users\molch\Desktop\синх2019\С#\lab9\autocomplete\obj\Debug\Autocomplete.Properties.Resources.resources
+C:\Users\molch\Desktop\синх2019\С#\lab9\autocomplete\obj\Debug\autocomplete.csproj.GenerateResource.cache
+C:\Users\molch\Desktop\синх2019\С#\lab9\autocomplete\obj\Debug\autocomplete.csproj.CopyComplete
+C:\Users\molch\Desktop\синх2019\С#\lab9\autocomplete\obj\Debug\Autocomplete.exe
+C:\Users\molch\Desktop\синх2019\С#\lab9\autocomplete\obj\Debug\Autocomplete.pdb

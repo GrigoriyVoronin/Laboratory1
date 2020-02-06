@@ -1,0 +1,13 @@
+C:\Users\molch\Desktop\синх2019\С#\lab5\TextAnalysis\bin\Debug\HarryPotterText.txt
+C:\Users\molch\Desktop\синх2019\С#\lab5\TextAnalysis\bin\Debug\TextAnalysis.exe.config
+C:\Users\molch\Desktop\синх2019\С#\lab5\TextAnalysis\bin\Debug\TextAnalysis.exe
+C:\Users\molch\Desktop\синх2019\С#\lab5\TextAnalysis\bin\Debug\TextAnalysis.pdb
+C:\Users\molch\Desktop\синх2019\С#\lab5\TextAnalysis\bin\Debug\nunit.framework.dll
+C:\Users\molch\Desktop\синх2019\С#\lab5\TextAnalysis\bin\Debug\nunitlite.dll
+C:\Users\molch\Desktop\синх2019\С#\lab5\TextAnalysis\obj\Debug\TextAnalysis.csprojAssemblyReference.cache
+C:\Users\molch\Desktop\синх2019\С#\lab5\TextAnalysis\obj\Debug\TextAnalysis.Properties.Resources.resources
+C:\Users\molch\Desktop\синх2019\С#\lab5\TextAnalysis\obj\Debug\TextAnalysis.csproj.GenerateResource.cache
+C:\Users\molch\Desktop\синх2019\С#\lab5\TextAnalysis\obj\Debug\TextAnalysis.csproj.CoreCompileInputs.cache
+C:\Users\molch\Desktop\синх2019\С#\lab5\TextAnalysis\obj\Debug\TextAnalysis.csproj.CopyComplete
+C:\Users\molch\Desktop\синх2019\С#\lab5\TextAnalysis\obj\Debug\TextAnalysis.exe
+C:\Users\molch\Desktop\синх2019\С#\lab5\TextAnalysis\obj\Debug\TextAnalysis.pdb

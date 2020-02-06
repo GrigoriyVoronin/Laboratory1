@@ -1,0 +1,7 @@
+C:\Users\molch\Desktop\синх2019\С#\lab5\minilab5\bin\Debug\minilab5.exe.config
+C:\Users\molch\Desktop\синх2019\С#\lab5\minilab5\bin\Debug\minilab5.exe
+C:\Users\molch\Desktop\синх2019\С#\lab5\minilab5\bin\Debug\minilab5.pdb
+C:\Users\molch\Desktop\синх2019\С#\lab5\minilab5\obj\Debug\minilab5.csprojAssemblyReference.cache
+C:\Users\molch\Desktop\синх2019\С#\lab5\minilab5\obj\Debug\minilab5.csproj.CoreCompileInputs.cache
+C:\Users\molch\Desktop\синх2019\С#\lab5\minilab5\obj\Debug\minilab5.exe
+C:\Users\molch\Desktop\синх2019\С#\lab5\minilab5\obj\Debug\minilab5.pdb

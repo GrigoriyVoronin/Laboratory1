@@ -1,0 +1,43 @@
+{
+  "version": 3,
+  "targets": {
+    ".NETCoreApp,Version=v2.1": {}
+  },
+  "libraries": {},
+  "projectFileDependencyGroups": {
+    ".NETCoreApp,Version=v2.1": []
+  },
+  "packageFolders": {
+    "C:\\Users\\st551-06\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "E:\\data\\С#\\2\\Задачи на семинар\\Cond1_7\\Cond1_7\\Cond1_7.csproj",
+      "projectName": "Cond1_7",
+      "projectPath": "E:\\data\\С#\\2\\Задачи на семинар\\Cond1_7\\Cond1_7\\Cond1_7.csproj",
+      "packagesPath": "C:\\Users\\st551-06\\.nuget\\packages\\",
+      "outputPath": "E:\\data\\С#\\2\\Задачи на семинар\\Cond1_7\\Cond1_7\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\st551-06\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "netcoreapp2.1"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "netcoreapp2.1": {
+          "projectReferences": {}
+        }
+      }
+    },
+    "frameworks": {
+      "netcoreapp2.1": {}
+    }
+  }
+}
